@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo D · Faixa rolante + grão + grade</title>
+<meta name="description" content="Teste: marquee acessível com pausa, grade de medição, e 4 jeitos de fazer grão (?grao=svg|png|steps|filter).">
+<!--
+  FAIXA: 2 cópias do conteúdo; a 2ª é aria-hidden. translateX(0 → -50%) linear infinito; duração = largura / velocidade
+  (px por segundo, 45 px/s), botão de pausa sempre visível (WCAG 2.2.2), pausa no foco/hover do botão não vale — o botão manda.
+  Movimento reduzido: sem animação, 1 cópia só, quebra em linhas (a informação continua toda na tela).
+  GRÃO (?grao=): svg = azulejo SVG feTurbulence como background (rasterizado 1×)  ·  png = azulejo PNG 96 px
+                 steps = PNG com tremida a 8 quadros/s (só transform)  ·  filter = feTurbulence em tela cheia (MAU: re-rasteriza)
+  GRADE: 2 gradientes lineares repetidos + máscara radial; custo ≈ zero.
+-->
+<style>
+@font-face{font-family:"Big Shoulders";src:url(../fonts/bigshoulders-900.woff2) format("woff2");font-weight:900;font-display:swap}
+@font-face{font-family:"Archivo";src:url(../fonts/archivo-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Archivo";src:url(../fonts/archivo-700.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Azeret Mono";src:url(../fonts/azeretmono-500.woff2) format("woff2");font-weight:500;font-display:swap}
+:root{--ink:#0E0E10;--gold:#E2B04A;--paper:#ECE7DC;--line:rgba(236,231,220,.16);--pad:clamp(20px,5vw,64px);--vel:45;
+ --f-d:"Big Shoulders",Impact,sans-serif;--f-t:"Archivo",system-ui,sans-serif;--f-m:"Azeret Mono",ui-monospace,monospace}
+*{box-sizing:border-box;margin:0}
+body{background:var(--ink);color:var(--paper);font:400 clamp(1.0625rem,1rem + .4vw,1.25rem)/1.5 var(--f-t);overflow-x:clip}
+.sec{position:relative;padding:clamp(48px,8vw,112px) var(--pad);overflow:clip}
+.eyebrow{font:500 .8125rem/1.4 var(--f-m);letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+h2{font:900 clamp(2.75rem,9vw,6rem)/1 var(--f-d);text-transform:uppercase;margin-top:12px;max-width:14ch;text-wrap:balance}
+p.lead{max-width:44ch;margin-top:20px}
+/* grade de medição: fio fino + pontos nos cruzamentos, some nas bordas (máscara) */
+.grade{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:calc(100%/8) 96px;
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 80% 70% at 50% 40%,#000 30%,transparent 100%)}
+.sec>*:not(.grade){position:relative}
+/* faixas */
+.faixas{position:relative;padding:clamp(32px,6vw,72px) 0;overflow:clip}
+.faixa{display:flex;align-items:center;gap:0;overflow:clip;white-space:nowrap}
+.f1{background:var(--gold);color:var(--ink);transform:rotate(-1.6deg) scale(1.03);transform-origin:center}
+.f2{border-block:2px solid var(--paper);transform:rotate(1.2deg) scale(1.03);margin-top:clamp(20px,4vw,40px)}
+.trilho{display:flex;flex:none;animation:corre var(--dur,40s) linear infinite}
+.f2 .trilho{animation-direction:reverse;--dur:52s}
+.grupo{display:flex;flex:none;align-items:center}
+.grupo span{font:900 clamp(2.25rem,7vw,4.5rem)/1.1 var(--f-d);text-transform:uppercase;padding:.08em 0;letter-spacing:.01em}
+.grupo i{width:.5em;height:.5em;background:currentColor;margin:0 .6em;flex:none;display:block;font-size:clamp(2.25rem,7vw,4.5rem);transform:scale(.45)}
+.f2 .grupo span{color:transparent;-webkit-text-stroke:1.5px var(--paper)}
+.f2 .grupo i{color:var(--gold)}
+@keyframes corre{to{transform:translateX(-50%)}}
+.ctrl{display:flex;justify-content:flex-end;padding:16px var(--pad) 0}
+.btn{min-height:48px;padding:0 18px;border:1.5px solid var(--paper);background:transparent;color:var(--paper);font:500 .8125rem/1 var(--f-m);letter-spacing:.14em;text-transform:uppercase;border-radius:6px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.btn[aria-pressed=true]{background:var(--paper);color:var(--ink)}
+.paused .trilho{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){
+  .trilho{animation:none;transform:none}
+  .faixa{white-space:normal}
+  .trilho,.grupo{flex-wrap:wrap}
+  .grupo[aria-hidden]{display:none}
+  .f1,.f2{transform:none}
+  .ctrl{display:none}
+}
+/* ---- grão: 4 variantes ---- */
+.grao{position:fixed;inset:0;pointer-events:none;z-index:9;opacity:.09;mix-blend-mode:screen}
+.g-svg .grao{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -.2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
+.g-png .grao,.g-steps .grao{background:url(img/grao-96.png);opacity:.5;mix-blend-mode:normal}
+.g-steps .grao{inset:-96px;animation:tremer .9s steps(1,end) infinite}
+@keyframes tremer{0%{transform:translate(0,0)}14%{transform:translate(-31px,17px)}28%{transform:translate(23px,-44px)}42%{transform:translate(-62px,-9px)}57%{transform:translate(40px,51px)}71%{transform:translate(-14px,70px)}85%{transform:translate(58px,-27px)}}
+.g-filter .grao{mix-blend-mode:screen;opacity:.35}
+.g-filter .grao svg{width:100%;height:100%;display:block}
+@media (prefers-reduced-motion:reduce){.g-steps .grao{animation:none}}
+.bar{display:flex;justify-content:space-between;align-items:center;padding:14px var(--pad);border-bottom:1px solid var(--line);font:500 .8125rem/1 var(--f-m);letter-spacing:.14em;text-transform:uppercase}
+</style>
+</head>
+<body class="g-svg">
+<header class="bar"><span>MARCA</span><span id="modo">grão: svg</span></header>
+
+<section class="sec">
+  <div class="grade" aria-hidden="true"></div>
+  <p class="eyebrow">Sala de controle</p>
+  <h2>Três noites no ar.</h2>
+  <p class="lead">Faixa lenta com informação real, grade de medição por baixo e um grão único por cima de tudo.</p>
+</section>
+
+<section class="faixas" aria-label="Resumo da transmissão">
+  <div class="faixa f1" id="f1"><div class="trilho">
+    <div class="grupo"><span>Ao vivo</span><i></i><span>3 noites</span><i></i><span>1 condição</span><i></i><span>grupo fechado</span><i></i></div>
+    <div class="grupo" aria-hidden="true"><span>Ao vivo</span><i></i><span>3 noites</span><i></i><span>1 condição</span><i></i><span>grupo fechado</span><i></i></div>
+  </div></div>
+  <div class="faixa f2" id="f2"><div class="trilho">
+    <div class="grupo"><span>Força</span><i></i><span>Mobilidade</span><i></i><span>Corrida</span><i></i></div>
+    <div class="grupo" aria-hidden="true"><span>Força</span><i></i><span>Mobilidade</span><i></i><span>Corrida</span><i></i></div>
+  </div></div>
+  <div class="ctrl"><button class="btn" id="pausa" type="button" aria-pressed="false">Pausar faixas</button></div>
+</section>
+
+<section class="sec" style="min-height:70svh">
+  <div class="grade" aria-hidden="true"></div>
+  <p class="eyebrow">Rodapé</p>
+  <h2>Entre no grupo.</h2>
+</section>
+
+<div class="grao" aria-hidden="true" id="grao"></div>
+<script>
+(function(){
+  var q = (location.search.match(/grao=(\w+)/) || [,"svg"])[1];
+  document.body.className = "g-" + q;
+  document.getElementById("modo").textContent = "grão: " + q;
+  if (q === "filter") {
+    document.getElementById("grao").innerHTML =
+      '<svg xmlns="http://www.w3.org/2000/svg"><filter id="n" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -.2"/></filter><rect width="100%" height="100%" filter="url(#n)"/></svg>';
+  }
+  // cada grupo precisa ser mais largo que a tela, senão aparece um buraco no fim do trilho
+  document.querySelectorAll(".trilho").forEach(function (t) {
+    var g = t.children[0], g2 = t.children[1], base = g.innerHTML, w = g.getBoundingClientRect().width, guard = 0;
+    while (w && w < innerWidth + 40 && guard++ < 6) { g.insertAdjacentHTML("beforeend", base); w = g.getBoundingClientRect().width; }
+    g2.innerHTML = g.innerHTML;
+  });
+  // velocidade em px/s: duração = largura de UMA cópia / velocidade
+  var vel = 45;
+  document.querySelectorAll(".trilho").forEach(function (t) {
+    var w = t.firstElementChild.getBoundingClientRect().width;
+    if (w) t.style.setProperty("--dur", (w / vel).toFixed(1) + "s");
+  });
+  document.fonts.ready.then(function(){
+    document.querySelectorAll(".trilho").forEach(function (t) {
+      var w = t.firstElementChild.getBoundingClientRect().width;
+      if (w) t.style.setProperty("--dur", (w / vel).toFixed(1) + "s");
+    });
+  });
+  var b = document.getElementById("pausa");
+  b.addEventListener("click", function () {
+    var on = b.getAttribute("aria-pressed") !== "true";
+    b.setAttribute("aria-pressed", on);
+    b.textContent = on ? "Retomar faixas" : "Pausar faixas";
+    document.querySelector(".faixas").classList.toggle("paused", on);
+  });
+})();
+</script>
+</body>
+</html>

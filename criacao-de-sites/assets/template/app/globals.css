@@ -1,0 +1,92 @@
+/*
+ * Tokens + base do site.
+ *
+ * Tailwind v4: os tokens da MARCA (cores, fontes, raios) vêm de styles/tokens.css (gerado de content/marca.json por
+ * `npm run assets`). Aqui ficam os tokens FIXOS do padrão de página: pontos de quebra, escala de texto, espaço
+ * (12·24·40, margem, respiro) e curvas. `@theme static` faz TODO token virar variável CSS (mesmo sem utilidade).
+ * Contrato dos números: skills/direcao-de-arte/references/padrao-de-pagina.md §1.
+ */
+@import 'tailwindcss' source(none);
+@import '../styles/tokens.css';
+@source '../app';
+@source '../components';
+@source '../lib';
+
+/* ============================== TOKENS FIXOS ============================== */
+@theme static {
+  /* pontos de quebra (mobile-first). Larguras de TESTE: 360 · 390 · 768 · 1024 · 1440 */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 600px; /* celular grande / tablet pequeno */
+  --breakpoint-md: 768px; /* tablet */
+  --breakpoint-lg: 1024px; /* desktop pequeno: layout de 12 colunas */
+  --breakpoint-xl: 1440px; /* desktop */
+
+  /* tipografia: 5 degraus + numerais gigantes (desenho, não texto lido) */
+  --text-*: initial;
+  --text-label: 0.875rem; /* 14 */
+  --text-label--line-height: 1.4;
+  --text-body: clamp(1.125rem, 1.07rem + 0.24vw, 1.25rem); /* 18 -> 20 */
+  --text-body--line-height: 1.5;
+  --text-lead: clamp(1.75rem, 1.3rem + 1.4vw, 2.75rem); /* 28 -> 44 */
+  --text-lead--line-height: 1.02;
+  --text-h2: clamp(2.5rem, 1.7rem + 3.2vw, 4.75rem); /* 40 -> 76 */
+  --text-h2--line-height: 1;
+  --text-numeral: clamp(6.5rem, 4rem + 11vw, 12rem); /* 104 -> 192 */
+  --text-numeral--line-height: 0.78;
+
+  /* curvas únicas */
+  --ease-marca: cubic-bezier(0.4, 0.14, 0.3, 1);
+  --ease-saida: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* Espaçamento semântico responsivo (as utilidades usam var(...) direto) */
+@theme inline {
+  --spacing-margem: var(--m); /* margem lateral: 24 · 40 · clamp(48px,6vw,112px) */
+  --spacing-g1: var(--g1); /* 12  mesmo grupo (sub<->data, CTA<->micro) */
+  --spacing-g2: var(--g2); /* 24  grupos relacionados (header<->foto, H1<->sub) */
+  --spacing-g3: var(--g3); /* 40  grupos separados (foto<->H1, data<->CTA) */
+  --spacing-secao: var(--sec); /* respiro de cada lado da seção (vão entre seções = 2x) */
+  --spacing-gut: var(--gut); /* gap entre colunas/cartões */
+  --text-h1: var(--h1);
+  --text-h1--line-height: 0.96;
+}
+
+:root {
+  --m: 24px;
+  --g1: 12px;
+  --g2: 24px;
+  --g3: 40px;
+  --sec: 72px;
+  --gut: 16px;
+  --h1: var(--text-h2); /* mobile = h2 (40 px); sobe no desktop */
+  --header-h: 64px;
+  --sticky-h: 64px;
+  --err: var(--color-erro);
+  --btn-radius: var(--radius-sinal);
+  color-scheme: dark;
+  interpolate-size: allow-keywords;
+}
+@media (min-width: 600px) {
+  :root {
+    --m: 40px;
+    --gut: 24px;
+    --sec: 112px;
+  }
+}
+@media (min-width: 768px) {
+  :root {
+    --header-h: 72px;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --m: clamp(48px, 6vw, 112px);
+    --sec: clamp(112px, 9vw, 144px);
+    --h1: min(5.25rem, 5.9vw);
+  }
+}
+
+/* ============================== BASE ============================== */
+@import '../styles/base.css' layer(base);
+@import '../styles/components.css' layer(components);
+@import '../styles/pagina.css' layer(components);

@@ -1,0 +1,14 @@
+{
+  "name": "estudio-design",
+  "description": "Skills de design do estúdio (PT-BR).",
+  "owner": { "name": "Estúdio de Design" },
+  "allowCrossMarketplaceDependenciesOn": ["caveman"],
+  "plugins": [
+    {
+      "name": "estudio-design",
+      "source": "./",
+      "description": "Logo, identidade, direção de arte, sites e revisão de design — com respostas econômicas (caveman).",
+      "dependencies": [{ "name": "caveman", "marketplace": "caveman" }]
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo B · Scroll pinado: 3 noites trocando</title>
+<meta name="description" content="Teste: 3 cartões que trocam enquanto o palco fica fixo. CSS puro (view timeline) e, com ?gsap, versão ScrollTrigger.">
+<!--
+  PADRÃO: o HTML base já é a versão FINAL SEM MOVIMENTO (3 cartões empilhados, todos legíveis).
+  O movimento entra só dentro de @supports (animation-timeline) + prefers-reduced-motion: no-preference.
+  Janela da animação = "contain 0% contain 100%": o tempo em que a seção cobre a tela inteira (palco fixo).
+  Cor = camada com opacity (compositor), nunca animar background-color.
+  ?gsap  → mesma coisa com ScrollTrigger (pin + scrub), para comparar peso e comportamento.
+-->
+<style>
+@font-face{font-family:"Big Shoulders";src:url(../fonts/bigshoulders-900.woff2) format("woff2");font-weight:900;font-display:swap}
+@font-face{font-family:"Archivo";src:url(../fonts/archivo-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Archivo";src:url(../fonts/archivo-700.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Azeret Mono";src:url(../fonts/azeretmono-500.woff2) format("woff2");font-weight:500;font-display:swap}
+:root{--ink:#0E0E10;--gold:#E2B04A;--paper:#ECE7DC;--line:rgba(236,231,220,.2);--ease:cubic-bezier(.4,.14,.3,1);--pad:clamp(20px,5vw,64px);
+ --f-d:"Big Shoulders",Impact,sans-serif;--f-t:"Archivo",system-ui,sans-serif;--f-m:"Azeret Mono",ui-monospace,monospace;
+ --c1:#2F6BFF;--c2:#F2542D;--c3:#7A5CFF}
+*{box-sizing:border-box;margin:0}
+body{background:var(--ink);color:var(--paper);font:400 clamp(1.0625rem,1rem + .4vw,1.25rem)/1.5 var(--f-t);overflow-x:clip}
+.intro,.outro{padding:clamp(56px,10vw,120px) var(--pad);max-width:1280px;margin:0 auto}
+.eyebrow{font:500 .8125rem/1.4 var(--f-m);letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+h2{font:900 clamp(3rem,10vw,6.5rem)/1 var(--f-d);text-transform:uppercase;margin-top:12px}
+.hint{font:500 .8125rem/1.4 var(--f-m);letter-spacing:.12em;text-transform:uppercase;color:#B4AEA2;margin-top:16px}
+/* ---------- BASE: pilha estática (sem JS, sem suporte, movimento reduzido) ---------- */
+.noites{position:relative}
+.stage{position:relative}
+.cards{list-style:none;padding:0;display:grid;gap:2px;background:var(--ink)}
+.card{position:relative;overflow:clip;display:grid;grid-template-columns:1fr auto;align-items:end;gap:12px;min-height:min(78svh,560px);padding:clamp(24px,5vw,64px) var(--pad);background:var(--bg)}
+.card:nth-child(1){--bg:#06284f;--c:var(--c1)}
+.card:nth-child(2){--bg:#4a0f08;--c:var(--c2)}
+.card:nth-child(3){--bg:#2a1450;--c:var(--c3)}
+.num{font:900 clamp(11rem,min(62vw,56svh),34rem)/.74 var(--f-d);color:var(--c);filter:brightness(1.35);letter-spacing:-.02em}
+.who{align-self:start;grid-column:1/-1;display:grid;gap:6px;position:relative;z-index:1}
+.who .k{font:500 .8125rem/1.4 var(--f-m);letter-spacing:.16em;text-transform:uppercase}
+.who .n{font:900 clamp(3.25rem,13vw,7rem)/.9 var(--f-d);text-transform:uppercase}
+.who .p{font:700 1rem/1.3 var(--f-t);letter-spacing:.08em;text-transform:uppercase;display:inline-block;background:var(--c);color:#fff;padding:8px 12px;justify-self:start;filter:brightness(.78) saturate(1.1)}
+.card:nth-child(1) .p,.card:nth-child(3) .p{color:#fff}
+.photo{position:absolute;right:0;bottom:0;height:min(70%,420px);width:auto;max-width:56%;object-fit:contain;object-position:100% 100%}
+.prog,.dots{display:none}
+.outro{border-top:1px solid var(--line)}
+/* ---------- MOVIMENTO (CSS puro) ---------- */
+@supports (animation-timeline: view()) {
+ @media (prefers-reduced-motion:no-preference){
+  html:not(.gs) .noites{height:400svh;view-timeline:--s block}
+  html:not(.gs) .stage{position:sticky;top:0;height:100svh;overflow:clip}
+  html:not(.gs) .cards{display:block;height:100%;position:relative;background:none}
+  html:not(.gs) .card{position:absolute;inset:0;min-height:0;height:100%;background:none;animation:both linear;animation-timeline:--s;animation-range:contain 0% contain 100%}
+  html:not(.gs) .card:nth-child(1){animation-name:c1}
+  html:not(.gs) .card:nth-child(2){animation-name:c2}
+  html:not(.gs) .card:nth-child(3){animation-name:c3}
+  html:not(.gs) .bg{position:absolute;inset:0;opacity:0}
+  html:not(.gs) .bg:nth-child(1){background:#06284f;animation:b1 both linear;animation-timeline:--s;animation-range:contain 0% contain 100%}
+  html:not(.gs) .bg:nth-child(2){background:#4a0f08;animation:b2 both linear;animation-timeline:--s;animation-range:contain 0% contain 100%}
+  html:not(.gs) .bg:nth-child(3){background:#2a1450;animation:b3 both linear;animation-timeline:--s;animation-range:contain 0% contain 100%}
+  html:not(.gs) .prog{display:block;position:absolute;left:var(--pad);right:var(--pad);top:18px;height:3px;background:var(--line);z-index:3}
+  html:not(.gs) .prog i{display:block;height:100%;background:var(--gold);transform-origin:left;transform:scaleX(0);animation:prog both linear;animation-timeline:--s;animation-range:contain 0% contain 100%}
+ }
+}
+@keyframes c1{0%,28%{opacity:1;transform:none}34%,100%{opacity:0;transform:translateY(-28px)}}
+@keyframes c2{0%,36%{opacity:0;transform:translateY(28px)}42%,60%{opacity:1;transform:none}66%,100%{opacity:0;transform:translateY(-28px)}}
+@keyframes c3{0%,69%{opacity:0;transform:translateY(28px)}75%,100%{opacity:1;transform:none}}
+@keyframes b1{0%,30%{opacity:1}36%,100%{opacity:0}}
+@keyframes b2{0%,30%{opacity:0}36%,64%{opacity:1}70%,100%{opacity:0}}
+@keyframes b3{0%,64%{opacity:0}70%,100%{opacity:1}}
+@keyframes prog{to{transform:scaleX(1)}}
+.bg{display:none}
+@supports (animation-timeline: view()) { @media (prefers-reduced-motion:no-preference){ html:not(.gs) .bg{display:block} } }
+/* ---------- versão GSAP (?gsap) ---------- */
+html.gs-on .stage{height:100svh;overflow:clip;position:relative}
+html.gs-on .cards{display:block;height:100%;position:relative}
+html.gs-on .card{position:absolute;inset:0;min-height:0;height:100%;background:var(--bg)}
+html.gs-on .card:nth-child(n+2){opacity:0}
+html.gs-on .prog{display:block;position:absolute;left:var(--pad);right:var(--pad);top:18px;height:3px;background:var(--line);z-index:3}
+html.gs-on .prog i{display:block;height:100%;background:var(--gold);transform-origin:left;transform:scaleX(0)}
+</style>
+</head>
+<body>
+<section class="intro">
+  <p class="eyebrow">Programação</p>
+  <h2>Cada noite,<br>um professor.</h2>
+  <p class="hint">Role para ver as 3 noites</p>
+</section>
+
+<section class="noites" id="noites" aria-label="As três noites">
+  <div class="stage">
+    <div class="bg" aria-hidden="true"></div><div class="bg" aria-hidden="true"></div><div class="bg" aria-hidden="true"></div>
+    <div class="prog" aria-hidden="true"><i></i></div>
+    <ol class="cards">
+      <li class="card">
+        <div class="who"><span class="k">Noite 1</span><span class="n">Convidada A</span><span class="p">Força</span></div>
+        <span class="num" aria-hidden="true">1</span>
+        <img class="photo" src="img/pessoa.svg" width="480" height="624" alt="" loading="lazy">
+      </li>
+      <li class="card">
+        <div class="who"><span class="k">Noite 2</span><span class="n">Convidado B</span><span class="p">Mobilidade</span></div>
+        <span class="num" aria-hidden="true">2</span>
+      </li>
+      <li class="card">
+        <div class="who"><span class="k">Noite 3</span><span class="n">Convidada C</span><span class="p">Corrida</span></div>
+        <span class="num" aria-hidden="true">3</span>
+        <img class="photo" src="img/pessoa.svg" width="480" height="663" alt="" loading="lazy">
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="outro">
+  <p class="eyebrow">Depois das 3 noites</p>
+  <h2>Uma condição.</h2>
+</section>
+
+<script>
+if (/[?&]gsap/.test(location.search)) {
+  document.documentElement.classList.add("gs");   // desliga a versão CSS pura
+  var a = ["../vendor/gsap/3.15.0/gsap.min.js", "../vendor/gsap/3.15.0/ScrollTrigger.min.js"], n = 0;
+  a.forEach(function (src) {
+    var s = document.createElement("script"); s.src = src; s.async = false;
+    s.onload = function () { if (++n === a.length) go(); };
+    document.head.appendChild(s);
+  });
+}
+function go() {
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", function () {
+    var root = document.documentElement; root.classList.add("gs-on");   // estilos de pilha absoluta SÓ com movimento
+    var c = gsap.utils.toArray(".card");
+    var tl = gsap.timeline({ scrollTrigger: { trigger: ".noites", start: "top top", end: "+=300%", pin: true, scrub: 0.6, anticipatePin: 1 } });
+    tl.to(".prog i", { scaleX: 1, ease: "none", duration: 3 }, 0);
+    tl.to(c[0], { autoAlpha: 0, y: -28, duration: .4 }, .9).fromTo(c[1], { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: .4 }, 1.0);
+    tl.to(c[1], { autoAlpha: 0, y: -28, duration: .4 }, 1.9).fromTo(c[2], { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: .4 }, 2.0);
+    return function () { root.classList.remove("gs-on"); };
+  });
+}
+</script>
+</body>
+</html>

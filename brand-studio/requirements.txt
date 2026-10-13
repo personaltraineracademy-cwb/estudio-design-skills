@@ -1,0 +1,25 @@
+# Pacotes Python das skills do estúdio (versões testadas em 10/2026, Python 3.12).
+# Instalar: python -m pip install -r requirements.txt   (ou: python scripts/instalar.py)
+
+# --- núcleo (obrigatório): SVG → PNG, texto em curvas, imagem, contraste
+resvg-py>=0.5          # render de SVG (substitui Inkscape/Illustrator)
+fonttools>=4.60        # fontes → curvas, kerning, subset de fontes do site
+brotli>=1.1            # woff2 (fontes do site)
+skia-pathops>=0.9      # remove contornos sobrepostos de fontes variáveis (texto vazado sem buracos)
+pillow>=11
+numpy>=2
+
+# --- composição e verificação (obrigatório para direcao-de-arte, brand-system e criacao-de-sites)
+playwright>=1.50       # dirige o Chrome instalado (channel="chrome"); NÃO precisa de "playwright install"
+opencv-python>=4.10    # medidas no pixel, detector de rosto YuNet
+scipy>=1.13
+scikit-image>=0.24
+shapely>=2.0           # geometria dos elementos (ornamentos)
+segno>=1.6             # QR code de verdade nos elementos
+zxing-cpp>=2.2         # confere se QR/código de barras gerado é lido
+pymupdf>=1.24          # ler PDF de referência
+
+# --- motores extras (recomendado)
+fastembed>=0.5         # CLIP local: repertório e teste de originalidade (baixa ~580 MB no 1º uso)
+vtracer>=0.6           # raster → SVG
+rembg[cpu]>=2.0        # recorte de foto (baixa ~180 MB por modelo no 1º uso)

@@ -1,0 +1,10 @@
+{
+  "name": "estudio-design",
+  "displayName": "Estúdio de Design",
+  "version": "1.0.0",
+  "description": "Estúdio de identidade visual em código: logo, sistema de marca, direção de arte de peças em série, sites de conversão e um protocolo único de revisão (máx. 2 rodadas), com modo econômico de tokens.",
+  "author": { "name": "Estúdio de Design" },
+  "license": "MIT",
+  "keywords": ["design", "branding", "logo", "identidade-visual", "direcao-de-arte", "landing-page", "pt-br"],
+  "skills": ["./brand-system", "./brand-studio", "./direcao-de-arte", "./criacao-de-sites", "./revisao-de-design"]
+}

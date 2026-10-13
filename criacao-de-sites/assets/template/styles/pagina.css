@@ -1,0 +1,303 @@
+/*
+ * CSS da PÁGINA-EXEMPLO (prefixo .pg-). Só composição: cores, fontes e raios vêm dos tokens da marca; espaço vem
+ * dos tokens fixos (--g1 12 · --g2 24 · --g3 40 · --m margem · --sec respiro · --gut vão).
+ * Regra: nenhum valor de espaço fora da escala 4·8·12·16·24·32·40·48·64·96·128·160·200 (padrao-de-pagina.md §1).
+ * Movimento: sempre ligado (total / suave / parado) — o estado natural do CSS é o FINAL (forwards/backwards, nunca both).
+ */
+
+/* ============================== cabeçalho ============================== */
+.pg-cab {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--color-ink);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-tinta) 14%, transparent);
+}
+.pg-cab__in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--g2);
+  min-height: var(--header-h);
+}
+.pg-cab__logo {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  min-height: 48px; /* alvo de toque >= 44 */
+}
+.pg-cab .est-logo {
+  --logo-h: 32px;
+}
+@media (min-width: 768px) {
+  .pg-cab .est-logo {
+    --logo-h: 48px; /* = altura do botão da barra: topo e base iguais pela tinta */
+  }
+}
+
+/* ============================== dobra: HOLOFOTE ==============================
+   Imagem (rompe o disco) → H1 → apoio → linha → botão → micro, num só eixo central. A foto cresce com a janela,
+   mas título e botão sempre cabem na 1ª tela (a ALTURA manda): width = min(100%, 940, max(piso, (100svh − resto) × 1,8)).
+   Vãos: 24 (cabeçalho↔foto, H1↔apoio) · 40 (foto↔H1, linha↔botão) · 12 (apoio↔linha, botão↔micro). */
+.pg-hero {
+  padding-block: var(--g2) 72px; /* ≥ 40 de ar no fim da dobra; o centramento vertical vem de .est-dobra */
+  overflow-x: clip;
+}
+.pg-hero__in {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+/* largura = f × (altura da janela − resto). f = 1 / (1/proporção + 0,045): o ar de 4,5cqw do topo entra na conta,
+   então a ALTURA do bloco (foto + ar) é sempre (100svh − resto), qualquer proporção de foto.
+   resto = o que sobra na dobra além da foto: cabeçalho, vãos, H1 (2–3 linhas), apoio, linha, botão, micro, ar final. */
+.pg-holofote {
+  --holo-resto: 590px; /* celular */
+  container-type: inline-size;
+  width: min(100%, 940px, max(240px, calc((100svh - var(--holo-resto)) * var(--holo-f, 1.665))));
+}
+@media (min-width: 600px) {
+  .pg-holofote {
+    --holo-resto: 520px;
+    width: min(100%, 940px, max(320px, calc((100svh - var(--holo-resto)) * var(--holo-f, 1.665))));
+  }
+}
+/* o ar do topo (4,5cqw) guarda o anel do disco, que sobe 3cqw acima da foto */
+.pg-holofote__in {
+  position: relative;
+  isolation: isolate;
+  padding-top: 4.5cqw;
+}
+.pg-holofote__in:not([data-foto]) {
+  aspect-ratio: var(--holo-f, 1.665) / 1; /* sem foto: a mesma proporção, para a composição não mudar */
+}
+.pg-holofote__foto {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* o disco nasce do eixo da foto: ø 48% da largura, topo 3% acima da foto, termina ATRÁS do tronco */
+.pg-disco {
+  position: absolute;
+  z-index: -1;
+  top: 1.5cqw;
+  left: 50%;
+  width: 48cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    circle at 50% 32%,
+    color-mix(in srgb, var(--color-destaque) 80%, #fff) 0%,
+    var(--color-destaque) 56%,
+    color-mix(in srgb, var(--color-destaque) 82%, #000) 100%
+  );
+  /* anel fino, afastado: o disco lido como alvo/lente */
+  box-shadow:
+    0 0 0 1.4cqw var(--color-ink),
+    0 0 0 calc(1.4cqw + 2px) var(--color-tinta);
+  animation: pg-holofote 0.9s var(--ease-saida) 0.05s backwards;
+}
+@keyframes pg-holofote {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.55);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+.pg-h1 {
+  /* a CAIXA ocupa a coluna inteira (mesma borda do cabeçalho); a medida de leitura vem do padding */
+  width: 100%;
+  padding-inline: max(0px, calc((100% - 18em) / 2));
+  margin-top: var(--g3);
+  font-size: clamp(2rem, 0.6rem + 3.6vw, 3.75rem);
+  line-height: 0.96;
+  text-wrap: balance;
+  text-box: trim-both cap alphabetic;
+}
+.pg-sub {
+  width: 100%;
+  padding-inline: max(0px, calc((100% - 36em) / 2));
+  margin-top: var(--g2);
+  color: var(--color-mute);
+  text-wrap: balance;
+  text-box: trim-both cap alphabetic;
+}
+.pg-data {
+  display: block;
+  margin-top: var(--g1);
+  color: var(--color-tinta);
+}
+.pg-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: var(--g3);
+}
+.pg-cta .est-btn {
+  min-height: 60px;
+  white-space: nowrap; /* o rótulo do botão principal nunca quebra em 2 linhas */
+}
+@media (min-width: 600px) {
+  .pg-cta .est-btn {
+    width: auto;
+  }
+}
+.pg-micro {
+  display: block;
+  margin-top: var(--g1);
+  color: var(--color-mute);
+  font-size: 1rem;
+  line-height: 1.5;
+  text-wrap: balance;
+}
+
+/* ============================== seções ============================== */
+.pg-titulo {
+  max-width: 16em;
+  margin-bottom: var(--g3);
+  font-size: var(--text-h2);
+  line-height: 1;
+}
+
+/* passos (papel) */
+.pg-passos__lista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--g3) var(--gut);
+}
+.pg-passo {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--g2);
+  row-gap: var(--g1);
+  align-items: start;
+  padding-top: var(--g2);
+  border-top: 2px solid var(--color-ink);
+}
+.pg-passo__n {
+  grid-row: span 2;
+  min-width: 2ch;
+  font-family: var(--font-display);
+  font-weight: var(--display-peso, 900);
+  font-size: clamp(4rem, 3rem + 6vw, 7rem);
+  line-height: 0.8;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+}
+.pg-passo__t {
+  font-size: var(--text-lead);
+  line-height: 1.02;
+}
+.pg-passo__d {
+  max-width: 34ch;
+}
+@media (min-width: 1024px) {
+  .pg-passos__lista {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .pg-passo {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--g2);
+  }
+  .pg-passo__n {
+    grid-row: auto;
+  }
+}
+
+/* destaques (ink): lista de linhas finas, nunca caixas */
+.pg-lista {
+  border-top: 1px solid color-mix(in srgb, var(--color-tinta) 22%, transparent);
+}
+.pg-lista__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--g1) var(--gut);
+  padding-block: var(--g3);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-tinta) 22%, transparent);
+}
+.pg-lista__item h3 {
+  font-size: var(--text-lead);
+  line-height: 1.02;
+}
+.pg-lista__item p {
+  max-width: 52ch;
+  color: var(--color-mute);
+}
+@media (min-width: 1024px) {
+  .pg-lista__item {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    align-items: baseline;
+  }
+  .pg-lista__item h3 {
+    grid-column: 1 / 6;
+  }
+  .pg-lista__item p {
+    grid-column: 6 / -1;
+  }
+}
+
+/* faixa: costura entre seções (só abaixo da dobra); cores = destaque/sobre-destaque por padrão */
+
+/* FAQ (papel) */
+.pg-faq {
+  --acc-line: var(--color-ink);
+  --acc-line-soft: color-mix(in srgb, var(--color-ink) 22%, transparent);
+  --acc-text: color-mix(in srgb, var(--color-ink) 82%, var(--color-papel));
+}
+.pg-faq .est-acc__item > summary {
+  font-size: clamp(1.25rem, 1.05rem + 0.9vw, 1.75rem);
+}
+.pg-faq__in .est-acc {
+  max-width: 60rem;
+}
+
+/* final: UMA ideia (frase + botão) */
+.pg-final__in {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* botão nowrap não alarga a trilha (lição do porte) */
+  justify-items: center;
+  gap: var(--g3);
+  text-align: center;
+}
+.pg-final__t {
+  max-width: 16em;
+  font-size: var(--text-h2);
+  line-height: 1;
+}
+.pg-final .est-btn {
+  min-height: 64px;
+  white-space: nowrap;
+}
+
+/* rodapé */
+.pg-rodape {
+  background: var(--color-ink-2);
+  padding-block: var(--g3);
+}
+.pg-rodape__in {
+  display: grid;
+  gap: var(--g2);
+}
+.pg-rodape__t {
+  max-width: 60ch;
+  color: var(--color-mute);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* ============================== movimento ==============================
+   total = padrão · suave = o sistema do visitante pede menos movimento (MESMA coreografia, curta, sem escala grande)
+   · parado = só por ?movimento=parado (nada anima; tudo no estado final). */
+:root[data-movimento='suave'] .pg-disco {
+  animation-duration: 0.45s;
+}
+:root[data-movimento='parado'] .pg-disco {
+  animation: none;
+}

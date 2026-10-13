@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo F · Contador e timecode honestos</title>
+<meta name="description" content="Teste: contagem regressiva com data real e 5 estados (antes, hoje, ao vivo, entre noites, encerrado). Nunca mostra 00 dias.">
+<!--
+  HONESTO = vem de datas reais (ISO com fuso -03:00; o Brasil não tem horário de verão desde 2019) e muda de ESTADO ao passar da data.
+  Nunca "00 dias", nunca reinicia sozinho, nunca inventa vaga ou prazo. Sem JS: o texto estático diz as datas.
+  ?agora=2026-10-20T19:45:00-03:00 simula o relógio. O painel "Estados" usa a mesma função com 5 relógios fixos.
+  Contador: texto atualizado 1x por segundo (não por quadro), tabular-nums, SEM aria-live (anunciar todo segundo é ruído);
+  uma frase estática (aria-live=polite) muda só quando o ESTADO muda. Timecode: rAF, só troca o texto quando o quadro muda;
+  botão "Congelar" (WCAG 2.2.2). Número-herói: @property --n + counter() (CSS puro), valor final real no HTML.
+-->
+<style>
+@property --n{syntax:"<integer>";inherits:false;initial-value:0}
+@font-face{font-family:"Big Shoulders";src:url(../fonts/bigshoulders-900.woff2) format("woff2");font-weight:900;font-display:swap}
+@font-face{font-family:"Archivo";src:url(../fonts/archivo-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Archivo";src:url(../fonts/archivo-700.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Azeret Mono";src:url(../fonts/azeretmono-500.woff2) format("woff2");font-weight:500;font-display:swap}
+:root{--ink:#0E0E10;--ink2:#17140F;--gold:#E2B04A;--paper:#ECE7DC;--line:rgba(236,231,220,.2);--live:#F2542D;--ease:cubic-bezier(.4,.14,.3,1);--pad:clamp(20px,5vw,64px);
+ --f-d:"Big Shoulders",Impact,sans-serif;--f-t:"Archivo",system-ui,sans-serif;--f-m:"Azeret Mono",ui-monospace,monospace}
+*{box-sizing:border-box;margin:0}
+body{background:var(--ink);color:var(--paper);font:400 clamp(1.0625rem,1rem + .4vw,1.25rem)/1.5 var(--f-t);overflow-x:clip}
+.pg{padding:clamp(40px,7vw,96px) var(--pad);max-width:1280px;margin:0 auto}
+.eyebrow{font:500 .8125rem/1.4 var(--f-m);letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+h1,h2{font:900 clamp(2.5rem,8vw,5rem)/1 var(--f-d);text-transform:uppercase;margin-top:12px;text-wrap:balance}
+.rel{margin-top:clamp(24px,4vw,40px);border:1px solid var(--line);padding:clamp(16px,3vw,32px);background:var(--ink2);display:grid;gap:12px}
+.rel .est{display:flex;align-items:center;gap:10px;font:500 .8125rem/1 var(--f-m);letter-spacing:.16em;text-transform:uppercase}
+.pt{width:10px;height:10px;border-radius:50%;background:var(--paper);flex:none}
+[data-e=aovivo] .pt{background:var(--live);animation:rec 1s steps(1,end) 5}
+[data-e=aovivo] .est{color:#fff}
+@keyframes rec{50%{opacity:.15}}
+.tc{font:500 clamp(2.25rem,9vw,5rem)/1 var(--f-m);font-variant-numeric:tabular-nums;letter-spacing:.02em;white-space:nowrap}
+.tc small{font-size:.38em;letter-spacing:.14em;color:#B4AEA2;display:block;margin-top:6px}
+.frase{font-size:1.0625rem;color:#E4DED2}
+/* número-herói: contagem em CSS puro */
+.heroi{font:900 clamp(6rem,30vw,16rem)/.8 var(--f-d);color:var(--gold);font-variant-numeric:tabular-nums;display:flex;align-items:baseline;gap:.15em}
+.heroi small{font:500 .8125rem/1.4 var(--f-m);letter-spacing:.16em;text-transform:uppercase;color:var(--paper)}
+.cnt.anim{font-size:0}
+.cnt.anim::before{font-size:clamp(6rem,30vw,16rem);counter-reset:n var(--n);content:counter(n);animation:conta 1.2s var(--ease) both}
+@keyframes conta{from{--n:0}to{--n:var(--alvo)}}
+@media (prefers-reduced-motion:reduce){.cnt.anim::before{animation:none;--n:var(--alvo)}[data-e=aovivo] .pt{animation:none}}
+.ctrl{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn{min-height:48px;padding:0 18px;border:1.5px solid var(--paper);background:transparent;color:var(--paper);font:500 .8125rem/1 var(--f-m);letter-spacing:.14em;text-transform:uppercase;border-radius:6px;cursor:pointer}
+.btn[aria-pressed=true]{background:var(--paper);color:var(--ink)}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+/* painel de estados */
+.grade{display:grid;gap:12px;margin-top:20px;grid-template-columns:minmax(0,1fr)}
+@media(min-width:760px){.grade{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1100px){.grade{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.grade .rel{margin:0;padding:16px}
+.grade .tc{font-size:clamp(1.5rem,5.4vw,2.5rem)}
+.grade .quando{font:500 .75rem/1.4 var(--f-m);color:#B4AEA2;letter-spacing:.06em}
+</style>
+</head>
+<body>
+<main class="pg">
+  <p class="eyebrow">Campanha · transmissão</p>
+  <h1 id="titulo">Faltam 3 noites ao vivo</h1>
+  <p class="frase" id="estatico">Primeira noite em 20/10/2026, às 19h30 (horário de Brasília). Segunda em 21/10 e terceira em 22/10.</p>
+
+  <section class="rel" id="rel" data-e="antes" aria-label="Relógio do evento">
+    <div class="est"><span class="pt" aria-hidden="true"></span><span id="rot">Falta para a primeira noite</span></div>
+    <div class="heroi"><span class="cnt" id="cnt" style="--alvo:10">10</span><small id="unid">dias</small></div>
+    <div class="tc" id="tc" aria-hidden="true">--:--:--<small>H : M : S</small></div>
+    <p class="frase" id="msg" role="status" aria-live="polite"></p>
+    <div class="ctrl"><button class="btn" id="cong" type="button" aria-pressed="false">Congelar timecode</button></div>
+  </section>
+
+  <h2 style="font-size:clamp(1.75rem,5vw,2.75rem);margin-top:clamp(32px,6vw,72px)">Estados (simulados)</h2>
+  <div class="grade" id="grade"></div>
+</main>
+
+<script>
+(function () {
+  var NOITES = [ ["2026-10-20T19:30:00-03:00", "2026-10-20T22:00:00-03:00"],
+                 ["2026-10-21T19:30:00-03:00", "2026-10-21T22:00:00-03:00"],
+                 ["2026-10-22T19:30:00-03:00", "2026-10-22T22:00:00-03:00"] ].map(function (n) { return [Date.parse(n[0]), Date.parse(n[1])]; });
+  var pad = function (n, l) { n = String(Math.floor(n)); while (n.length < (l || 2)) n = "0" + n; return n; };
+  var fmt = new Intl.DateTimeFormat("pt-BR", { timeZone: "America/Sao_Paulo", weekday: "long", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+  var diaSP = function (t) { return new Date(t).toLocaleDateString("sv-SE", { timeZone: "America/Sao_Paulo" }); };
+
+  // devolve o ESTADO a partir do relógio: nunca sai um "00 dias"
+  function estado(now) {
+    var i;
+    for (i = 0; i < NOITES.length; i++) if (now >= NOITES[i][0] && now < NOITES[i][1]) return { e: "aovivo", noite: i + 1, desde: NOITES[i][0] };
+    for (i = 0; i < NOITES.length; i++) if (now < NOITES[i][0]) {
+      var ant = i > 0 && now >= NOITES[i - 1][1];
+      return { e: ant ? "entre" : (diaSP(now) === diaSP(NOITES[i][0]) ? "hoje" : "antes"), noite: i + 1, alvo: NOITES[i][0] };
+    }
+    return { e: "fim" };
+  }
+  function partes(ms) { var s = Math.max(0, Math.floor(ms / 1000)); return { d: Math.floor(s / 86400), h: Math.floor(s % 86400 / 3600), m: Math.floor(s % 3600 / 60), s: s % 60 }; }
+  function texto(est, now) {
+    if (est.e === "fim") return { rot: "Transmissão encerrada", frase: "As três noites terminaram. A condição especial acabou; o replay fica no grupo.", tc: "ENCERRADA", sub: "" };
+    if (est.e === "aovivo") {
+      var el = now - est.desde, p = partes(el);
+      return { rot: "Ao vivo agora · noite " + est.noite, frase: "A noite " + est.noite + " está no ar. Entre pelo link do grupo.", tc: pad(p.d * 24 + p.h) + ":" + pad(p.m) + ":" + pad(p.s) + ":" + pad(Math.floor((el % 1000) / 1000 * 30)), sub: "tempo no ar · H:M:S:Q" };
+    }
+    var f = partes(est.alvo - now), alvo = fmt.format(est.alvo);
+    var rot = est.e === "hoje" ? "Hoje · noite " + est.noite : est.e === "entre" ? "Próxima: noite " + est.noite : "Falta para a noite " + est.noite;
+    var big = est.e === "antes" && f.d >= 1 ? f.d + (f.d === 1 ? " dia" : " dias") : null;
+    return { rot: rot, frase: (est.e === "hoje" ? "É hoje. " : "") + "Começa " + alvo + " (horário de Brasília).",
+             tc: (f.d ? f.d + " d " : "") + pad(f.h) + ":" + pad(f.m) + ":" + pad(f.s), sub: "H : M : S", dias: f.d, big: big };
+  }
+
+  // ---- relógio principal ----
+  var q = location.search.match(/agora=([^&]+)/), base = q ? Date.parse(decodeURIComponent(q[1])) : null, t0 = Date.now();
+  var agora = function () { return base ? base + (Date.now() - t0) : Date.now(); };
+  var rel = document.getElementById("rel"), el = {}, ult = "", congelado = false;
+  ["rot", "cnt", "unid", "tc", "msg", "titulo", "estatico"].forEach(function (k) { el[k] = document.getElementById(k); });
+  var animou = false;
+  function pintar(forca) {
+    var now = agora(), est = estado(now), t = texto(est, now);
+    if (est.e !== ult || forca) {
+      rel.dataset.e = est.e; el.rot.textContent = t.rot; el.msg.textContent = t.frase;      // aria-live só muda aqui
+      el.titulo.textContent = est.e === "fim" ? "Transmissão encerrada" : est.e === "aovivo" ? "Estamos ao vivo" : "Faltam 3 noites ao vivo";
+      var heroi = rel.querySelector(".heroi"); heroi.style.display = (t.big ? "" : "none");
+      el.estatico.style.display = "none";
+      ult = est.e;
+    }
+    if (t.big) {
+      el.cnt.style.setProperty("--alvo", t.dias); el.cnt.textContent = t.dias; el.unid.textContent = t.dias === 1 ? "dia" : "dias";
+      if (!animou && window.CSS && CSS.registerProperty !== undefined) { el.cnt.classList.add("anim"); animou = true; }
+    }
+    if ((!congelado || est.e !== "aovivo") && el.tc.firstChild.nodeValue !== t.tc) el.tc.firstChild.nodeValue = t.tc;   // só escreve se mudou
+    if (el.tc.lastElementChild.textContent !== t.sub) el.tc.lastElementChild.textContent = t.sub;
+  }
+  function tick() { pintar(false); }
+  pintar(true);
+  // aovivo: precisa do quadro; fora disso, 1x por segundo basta
+  setInterval(function () { var s = estado(agora()); if (s.e !== "aovivo") tick(); }, 1000);
+  (function r() { var s = estado(agora()); if (s.e === "aovivo" && !congelado) pintar(false); requestAnimationFrame(r); })();
+  document.getElementById("cong").addEventListener("click", function () {
+    congelado = !congelado; this.setAttribute("aria-pressed", congelado); this.textContent = congelado ? "Retomar timecode" : "Congelar timecode";
+  });
+
+  // ---- painel de estados simulados ----
+  var SIM = [["antes", "2026-10-14T12:00:00-03:00"], ["hoje", "2026-10-20T10:00:00-03:00"], ["ao vivo", "2026-10-20T19:45:00-03:00"],
+             ["entre noites", "2026-10-21T08:00:00-03:00"], ["encerrado", "2026-10-23T09:00:00-03:00"], ["1 dia antes", "2026-10-19T19:30:00-03:00"]];
+  var g = document.getElementById("grade");
+  SIM.forEach(function (s) {
+    var n = Date.parse(s[1]), e = estado(n), t = texto(e, n), c = document.createElement("section");
+    c.className = "rel"; c.dataset.e = e.e;
+    c.innerHTML = '<div class="est"><span class="pt"></span><span></span></div><div class="tc"></div><p class="frase"></p><p class="quando"></p>';
+    c.querySelector(".est span:last-child").textContent = t.rot;
+    c.querySelector(".tc").textContent = t.tc;
+    c.querySelector(".frase").textContent = t.frase;
+    c.querySelector(".quando").textContent = "relógio simulado: " + s[0] + " (" + s[1].slice(0, 16).replace("T", " ") + ")";
+    g.appendChild(c);
+  });
+})();
+</script>
+</body>
+</html>

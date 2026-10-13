@@ -1,0 +1,89 @@
+# =============================================================================
+# Site estático (Next.js export) — Apache (Hostinger e hospedagens compartilhadas)
+# Vai junto com o conteúdo de out/ (o `npm run build` já copia este arquivo para out/.htaccess).
+# Site 100% estático: nenhuma regra aqui é obrigatória; elas só deixam mais rápido e mais seguro.
+# Se algo der erro 500 depois de enviar, apague as seções (<IfModule>) uma a uma: o módulo pode não existir.
+# =============================================================================
+
+# --- básico ------------------------------------------------------------------
+Options -MultiViews -Indexes
+DirectoryIndex index.html
+DirectorySlash On
+AddDefaultCharset UTF-8
+
+# --- página 404 amigável (gerada pelo Next: 404.html) ------------------------
+# Domínio na raiz (public_html):
+ErrorDocument 404 /404.html
+# Em SUBPASTA (ex.: public_html/subpasta/): troque a linha acima por
+#   ErrorDocument 404 /subpasta/404.html   (o `npm run build` com NEXT_PUBLIC_BASE_PATH já faz esta troca em out/.htaccess)
+
+# --- HTTPS e domínio (DESCOMENTE depois de ativar o SSL gratuito no painel) --
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   RewriteCond %{HTTPS} !=on
+#   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+#   # www -> sem www (opcional)
+#   # RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+#   # RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+# </IfModule>
+
+# --- tipos de arquivo ----------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType image/webp .webp
+  AddType image/avif .avif
+  AddType image/svg+xml .svg .svgz
+  AddType text/javascript .js .mjs
+  AddType application/manifest+json .webmanifest
+</IfModule>
+
+# --- compressão (brotli quando existe; gzip sempre) ----------------------------
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/javascript application/javascript application/json image/svg+xml text/plain
+</IfModule>
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml text/plain
+</IfModule>
+
+# --- cache -----------------------------------------------------------------------
+# /_next/static/* tem hash no nome: pode ficar 1 ano. HTML nunca fica em cache longo.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 hour"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+</IfModule>
+<IfModule mod_headers.c>
+  # arquivos com hash do Next: imutáveis
+  <FilesMatch "\.(js|css|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  # imagens de public/ não têm hash: 30 dias (ao trocar uma imagem, troque o nome do arquivo)
+  <FilesMatch "\.(webp|png|svg|avif|ico)$">
+    Header set Cache-Control "public, max-age=2592000, stale-while-revalidate=86400"
+  </FilesMatch>
+  # HTML e dados do roteador: sempre revalidar
+  <FilesMatch "\.(html|txt)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+
+  # segurança básica
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), interest-cohort=()"
+  # HSTS: só ative com HTTPS funcionando em todo o domínio
+  # Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+</IfModule>
+
+# --- não expor arquivos de projeto, se alguém enviar a pasta errada ------------
+<FilesMatch "^(\.env.*|package(-lock)?\.json|.*\.(md|mjs|ts|tsx|map))$">
+  Require all denied
+</FilesMatch>

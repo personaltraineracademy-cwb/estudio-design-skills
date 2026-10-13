@@ -1,0 +1,10 @@
+# terceiros (instalar à parte) e coisas geradas
+logo-design/
+__pycache__/
+*.pyc
+node_modules/
+.next/
+out/
+.check/
+_entrega/
+.env

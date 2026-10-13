@@ -1,0 +1,58 @@
+{
+  "_nota": "Texto de EXEMPLO do template (neutro). No projeto do cliente, este arquivo é a COPY FINAL dele e a única fonte de texto comercial da página. Chaves que começam com _ não vão para a página.",
+  "meta": {
+    "nome": "Marca Exemplo",
+    "titulo": "Marca Exemplo · Página de exemplo",
+    "descricao": "Descrição curta da página, usada pelos buscadores e no cartão de compartilhamento."
+  },
+  "cabecalho": {"botao": "Quero participar"},
+  "hero": {
+    "h1": "Uma frase clara que diz o que é e para quem é",
+    "sub": "Um apoio curto com o diferencial da oferta, em uma ou duas linhas.",
+    "data": "Quando · onde · como",
+    "cta": "Quero participar",
+    "micro": "Um texto curto de apoio, abaixo do botão.",
+    "imagem": null
+  },
+  "passos": {
+    "titulo": "Como funciona",
+    "itens": [
+      {"t": "Primeiro passo.", "d": "Uma frase curta explica o que a pessoa faz primeiro."},
+      {"t": "Segundo passo.", "d": "Uma frase curta explica o que acontece em seguida."},
+      {"t": "Terceiro passo.", "d": "Uma frase curta explica o resultado final."}
+    ]
+  },
+  "destaques": {
+    "titulo": "O que você recebe",
+    "itens": [
+      {"t": "Primeiro benefício", "d": "Uma frase curta que explica o benefício."},
+      {"t": "Segundo benefício", "d": "Uma frase curta que explica o benefício."},
+      {"t": "Terceiro benefício", "d": "Uma frase curta que explica o benefício."},
+      {"t": "Quarto benefício", "d": "Uma frase curta que explica o benefício."}
+    ]
+  },
+  "faixa": ["Palavra um", "Palavra dois", "Palavra três", "Palavra quatro"],
+  "faq": {
+    "titulo": "Perguntas frequentes",
+    "itens": [
+      {"q": "Primeira pergunta?", "a": "Resposta curta e direta."},
+      {"q": "Segunda pergunta?", "a": "Resposta curta e direta."},
+      {"q": "Terceira pergunta?", "a": "Resposta curta e direta."}
+    ]
+  },
+  "cta_final": {"titulo": "Uma frase final que fecha a página.", "botao": "Quero participar"},
+  "rodape": "Texto legal ou de contato do rodapé.",
+  "modal": {
+    "titulo": "Preencha para participar",
+    "campos": [
+      {"id": "nome", "rotulo": "Nome", "tipo": "text"},
+      {"id": "whats", "rotulo": "WhatsApp", "tipo": "tel", "mascara": "(00) 00000-0000"},
+      {"id": "email", "rotulo": "E-mail (opcional)", "tipo": "email", "opcional": true}
+    ],
+    "botao": "Enviar",
+    "consentimento": "Usaremos seus dados só para entrar em contato sobre esta página.",
+    "sucesso_titulo": "Recebemos seus dados.",
+    "sucesso_texto": "Agora é só seguir para o próximo passo.",
+    "sucesso_botao": "Continuar"
+  }
+}

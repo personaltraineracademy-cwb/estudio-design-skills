@@ -1,0 +1,206 @@
+/* Reset mínimo + estilos de documento. (Tailwind preflight já normaliza o resto.) */
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  scroll-behavior: smooth;
+  background: var(--color-ink);
+}
+/* movimento = parado (só por escolha explícita ?movimento=parado; o padrão é rodar) */
+html[data-movimento='parado'] {
+  scroll-behavior: auto;
+}
+
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--color-ink);
+  color: var(--color-tinta);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  font-weight: var(--texto-peso, 500); /* peso de leitura da fonte de texto */
+  line-height: 1.5;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* trava a rolagem do fundo enquanto o <dialog> está aberto */
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
+/* GRÃO ÚNICO, fixo, por cima de tudo (6–10 %): tile PNG estático, sem mix-blend (barato no celular).
+   Para tirar numa seção: data-sem-grao no <body> ou na versão. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background: var(--grain-url, url('/img/grao-128.png')) 0 0 / 128px 128px repeat;
+  opacity: var(--grao-op, 0.55); /* 0,55 padrão; 0,3–0,38 em página toda escura (0,8 ficou forte demais em teste real) */
+}
+body[data-sem-grao]::after {
+  display: none;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+img {
+  height: auto;
+}
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure,
+blockquote {
+  margin: 0;
+}
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+button {
+  font: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: var(--display-peso, 900);
+  text-transform: var(--display-caixa, uppercase);
+  text-wrap: balance;
+}
+h1 {
+  font-size: var(--text-h1);
+  line-height: 0.96;
+}
+h2 {
+  font-size: var(--text-h2);
+  line-height: 1;
+}
+h3 {
+  font-size: var(--text-lead);
+  line-height: 1.02;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-tinta);
+  outline-offset: 3px;
+}
+.est-paper :focus-visible {
+  outline-color: var(--color-ink);
+}
+
+::selection {
+  background: var(--color-destaque);
+  color: var(--color-sobre-destaque);
+}
+
+/* contêiner único: header e conteúdo na MESMA margem */
+.wrap {
+  width: 100%;
+  max-width: calc(1280px + 2 * var(--m));
+  margin-inline: auto;
+  padding-inline: var(--m);
+}
+/* seção com respiro fluido (vão entre seções = 2 x --sec) */
+.sec {
+  position: relative;
+  padding-block: var(--sec);
+  overflow-x: clip;
+}
+
+/* fundo claro do mesmo sistema (erro e foco trocam de cor) */
+.est-paper {
+  --err: var(--color-erro-papel);
+  background: var(--color-papel);
+  color: var(--color-ink);
+}
+
+/* corta o espaço do entrelinha: o topo das MAIÚSCULAS fica rente ao topo do bloco (alinha com a foto/botão).
+   Chrome 133+, Safari 18.2+; nos demais, só deixa o respiro normal do entrelinha. */
+.trim-cap {
+  text-box: trim-both cap alphabetic;
+}
+.trim-end {
+  text-box: trim-end cap alphabetic;
+}
+
+/* rótulo mono (eyebrow, data, timecode) */
+.mono {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--text-label);
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* utilitário de acessibilidade */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* respiro no fim da página para a barra de CTA do mobile não cobrir o rodapé */
+.pb-sticky {
+  padding-bottom: calc(var(--sticky-h) + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 768px) {
+  .pb-sticky {
+    padding-bottom: 0;
+  }
+}
+
+/* Lenis (rolagem suave) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* link "pular para o conteúdo" */
+.est-skip {
+  position: absolute;
+  left: var(--m);
+  top: -80px;
+  z-index: 90;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 18px;
+  background: var(--color-destaque);
+  color: var(--color-sobre-destaque);
+  font-weight: 700;
+  text-decoration: none;
+}
+.est-skip:focus {
+  top: 12px;
+}

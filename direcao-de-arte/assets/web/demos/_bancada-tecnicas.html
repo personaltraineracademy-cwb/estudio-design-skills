@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bancada de técnicas (teste automático)</title>
+<!-- Não é página de entrega. Cada bloco é um trecho mínimo do catálogo  e o script no fim confere se funciona.
+     Resultado em window.__r (lido pelo Playwright). -->
+<style>
+@property --ang{syntax:"<angle>";inherits:false;initial-value:0deg}
+@property --n{syntax:"<integer>";inherits:false;initial-value:0}
+*{box-sizing:border-box;margin:0}
+body{background:#0E0E10;color:#ECE7DC;font:16px/1.5 system-ui,sans-serif;overflow-x:clip}
+section{padding:40px 20px;border-bottom:1px solid #333;min-height:200px}
+h3{font:600 13px/1 ui-monospace,monospace;letter-spacing:.1em;margin-bottom:16px;color:#E2B04A}
+/* 1. @property: anel de luz girando (gradiente cônico animado) */
+.anel{width:160px;height:160px;border-radius:50%;background:conic-gradient(from var(--ang),#E2B04A,transparent 30%,#E2B04A);animation:gira 4s linear infinite;
+  -webkit-mask:radial-gradient(circle,transparent 62%,#000 63%);mask:radial-gradient(circle,transparent 62%,#000 63%)}
+@keyframes gira{to{--ang:360deg}}
+/* 2. número por CSS puro */
+.num{font:900 64px/1 system-ui}.num::before{counter-reset:n var(--n);content:counter(n);animation:conta 1s both}
+@keyframes conta{to{--n:42}}
+/* 3. sibling-index() */
+.cascata li{list-style:none;display:inline-block;margin:4px;padding:8px 12px;background:#E2B04A;color:#000;opacity:0;animation:ent .4s both;animation-delay:calc(sibling-index() * 60ms)}
+@keyframes ent{from{opacity:0;translate:0 12px}to{opacity:1;translate:0 0}}
+/* 4. barra de progresso da página (scroll()) */
+.prog{position:fixed;left:0;top:0;height:3px;width:100%;background:#E2B04A;transform-origin:left;transform:scaleX(0);animation:p linear both;animation-timeline:scroll(root);z-index:5}
+@keyframes p{to{transform:scaleX(1)}}
+/* 5. parallax leve com view() */
+.pl{height:160px;overflow:clip;position:relative}.pl i{position:absolute;inset:-20% 0;background:linear-gradient(#333,#999);animation:par linear both;animation-timeline:view();}
+@keyframes par{from{translate:0 -10%}to{translate:0 10%}}
+/* 6. @starting-style */
+.ss{padding:8px 12px;background:#E2B04A;color:#000;display:inline-block;transition:opacity .3s,translate .3s;@starting-style{opacity:0;translate:0 12px}}
+/* 7. clip-path shape() e corner-shape */
+.sh{width:120px;height:80px;background:#E2B04A;clip-path:shape(from 0 0,line to 100% 0,line to 100% calc(100% - 20px),line to calc(100% - 20px) 100%,line to 0 100%,close)}
+.cs{width:120px;height:80px;background:#E2B04A;border-radius:30px;corner-shape:squircle}
+/* 8. magnético */
+.mag{display:inline-block;padding:16px 28px;background:#E2B04A;color:#000;border:0;font:700 16px system-ui;transition:translate .35s cubic-bezier(.3,1.6,.5,1)}
+/* 9. view transition */
+.vt{padding:12px;border:1px solid #E2B04A;display:inline-block;view-transition-name:caixa}
+/* 10. horizontal pinado */
+.hz{overflow:hidden;background:#111}.hz .tr{display:flex;width:max-content}.hz .pn{width:100vw;height:50vh;display:grid;place-items:center;font:900 80px system-ui;border-right:1px solid #333}
+</style>
+</head>
+<body>
+<div class="prog" aria-hidden="true"></div>
+<section><h3>1 @property · anel cônico</h3><div class="anel" id="anel"></div></section>
+<section><h3>2 número em CSS puro (@property + counter)</h3><div class="num" id="num"></div></section>
+<section><h3>3 sibling-index()</h3><ul class="cascata" id="casc"><li>1</li><li>2</li><li>3</li><li>4</li></ul></section>
+<section><h3>5 parallax leve (view)</h3><div class="pl"><i id="par"></i></div></section>
+<section><h3>6 @starting-style</h3><div id="ssbox"></div></section>
+<section><h3>7 shape() e corner-shape</h3><div class="sh" id="shape"></div><br><div class="cs" id="cs"></div></section>
+<section><h3>8 botão magnético</h3><button class="mag" id="mag">Entrar</button></section>
+<section><h3>9 View Transition (mesma página)</h3><div class="vt" id="vt">A</div> <button id="vtb">trocar</button></section>
+<section><h3>11 WebGL grão (shader-grao.js)</h3><canvas id="cv" style="width:100%;height:160px;display:block"></canvas></section>
+<section class="hz" id="hz"><div class="tr"><div class="pn">1</div><div class="pn">2</div><div class="pn">3</div><div class="pn">4</div></div></section>
+<section style="min-height:140vh"><h3>fim (altura para Lenis rolar)</h3></section>
+
+<script src="../vendor/gsap/3.15.0/gsap.min.js"></script>
+<script src="../vendor/gsap/3.15.0/ScrollTrigger.min.js"></script>
+<script src="../vendor/gsap/3.15.0/SplitText.min.js"></script>
+<script src="../vendor/lenis/1.3.26/lenis.min.js"></script>
+<script src="../snippets/shader-grao.min.js"></script>
+<script>
+var R = window.__r = {};
+function ok(k, v) { R[k] = v; }
+document.fonts.ready.then(async function () {
+  // 1 @property registrada e animando
+  ok("1_property_anel", (function () { var a = document.getAnimations().find(function (x) { return x.animationName === "gira"; }); return !!a && a.playState; })());
+  // 2 contador
+  await new Promise(function (r) { setTimeout(r, 1300); });
+  ok("2_counter", getComputedStyle(document.getElementById("num"), "::before").content + " | --n=" + getComputedStyle(document.getElementById("num"), "::before").getPropertyValue("--n"));
+  // 3 sibling-index
+  ok("3_sibling_index", document.getElementById("casc").children[3].getAnimations()[0] ? document.getElementById("casc").children[3].getAnimations()[0].effect.getComputedTiming().delay : "sem animação");
+  // 4 scroll() e 5 view()
+  ok("4_scroll_timeline", document.querySelector(".prog").getAnimations()[0] ? document.querySelector(".prog").getAnimations()[0].timeline.constructor.name : "nenhuma");
+  ok("5_view_timeline", document.getElementById("par").getAnimations()[0] ? document.getElementById("par").getAnimations()[0].timeline.constructor.name : "nenhuma");
+  // 6 starting-style
+  var b = document.createElement("div"); b.className = "ss"; b.textContent = "novo"; document.getElementById("ssbox").appendChild(b);
+  await new Promise(function (r) { requestAnimationFrame(function () { requestAnimationFrame(r); }); });
+  ok("6_starting_style_transicao", b.getAnimations().length > 0 || getComputedStyle(b).opacity !== "1" ? "transição ativa" : "sem transição");
+  // 7 shape/corner-shape
+  ok("7_shape", CSS.supports("clip-path", "shape(from 0 0, line to 10px 10px, close)"));
+  ok("7_corner_shape", CSS.supports("corner-shape", "squircle"));
+  // 8 magnético (cálculo)
+  var m = document.getElementById("mag");
+  if (matchMedia("(hover:hover) and (pointer:fine)").matches) {
+    m.addEventListener("pointermove", function (e) { var r = m.getBoundingClientRect(); var x = (e.clientX - r.left - r.width / 2) * .3, y = (e.clientY - r.top - r.height / 2) * .3;
+      m.style.translate = Math.max(-8, Math.min(8, x)) + "px " + Math.max(-8, Math.min(8, y)) + "px"; });
+    m.addEventListener("pointerleave", function () { m.style.translate = ""; });
+  }
+  ok("8_magnetico_ativo", matchMedia("(hover:hover) and (pointer:fine)").matches);
+  // 9 view transition
+  if (document.startViewTransition) {
+    var vt = document.startViewTransition(function () { document.getElementById("vt").textContent = "B"; });
+    try { await vt.finished; ok("9_view_transition", "terminou · texto=" + document.getElementById("vt").textContent); } catch (e) { ok("9_view_transition", "erro " + e.message); }
+  } else ok("9_view_transition", "sem API");
+  // 11 shader
+  var s = ShaderGrao(document.getElementById("cv"));
+  ok("11_shader_criado", !!s);
+  if (s) { var g = s.g, px = new Uint8Array(4 * 16); s.draw(performance.now()); g.readPixels(0, 0, 4, 4, g.RGBA, g.UNSIGNED_BYTE, px);
+    var uniq = new Set(); for (var i = 0; i < 16; i++) uniq.add(px[i * 4] + "," + px[i * 4 + 1]); ok("11_shader_pixels_distintos", uniq.size); }
+  // 12 GSAP + ScrollTrigger horizontal pinado + Lenis
+  gsap.registerPlugin(ScrollTrigger, SplitText);
+  var hz = document.getElementById("hz"), tr = hz.firstElementChild;
+  var tw = gsap.to(tr, { x: function () { return -(tr.scrollWidth - innerWidth); }, ease: "none",
+    scrollTrigger: { trigger: hz, pin: true, scrub: true, end: function () { return "+=" + (tr.scrollWidth - innerWidth); }, invalidateOnRefresh: true, anticipatePin: 1 } });
+  ScrollTrigger.refresh();
+  ok("12_scrolltrigger_pin_spacer", !!document.querySelector(".pin-spacer"));
+  var lenis = new Lenis({ duration: 1.1, lerp: .1, smoothWheel: true });
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add(function (t) { lenis.raf(t * 1000); }); gsap.ticker.lagSmoothing(0);
+  window.__lenis = lenis;
+  ok("13_lenis_criado", typeof lenis.scrollTo === "function");
+  // 14 SplitText autoSplit
+  var d = document.createElement("p"); d.textContent = "Três noites ao vivo com condição única para quem entrar"; d.style.cssText = "font:900 40px system-ui;width:260px"; document.body.prepend(d);
+  var sp = SplitText.create(d, { type: "lines", mask: "lines", autoSplit: true });
+  ok("14_splittext_linhas", sp.lines.length + " linhas · aria-label=" + (d.getAttribute("aria-label") || "").slice(0, 20));
+  window.__pronto = true;
+});
+</script>
+</body>
+</html>

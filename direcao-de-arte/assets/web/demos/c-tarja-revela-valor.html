@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo C · Tarja que revela o valor ao rolar</title>
+<meta name="description" content="Teste: tarja (clip/scale) que varre e revela o valor. CSS scroll-driven + IntersectionObserver de reserva.">
+<!--
+  PADRÃO: o valor já está no HTML e visível (sem JS, sem suporte, movimento reduzido = sem tarja).
+  A tarja é um ::after com transform:scaleX (compositor). Duas rotas de movimento:
+   1) CSS: animation-timeline:view() + animation-range (Chrome/Edge/Safari 26) — acompanha o dedo;
+   2) reserva: IntersectionObserver coloca .on e uma transition de 600 ms faz a mesma varrida (Firefox).
+  O texto de dentro da tarja é decorativo (aria-hidden); o leitor de tela lê o valor, nunca "restrito".
+-->
+<style>
+@font-face{font-family:"Big Shoulders";src:url(../fonts/bigshoulders-900.woff2) format("woff2");font-weight:900;font-display:swap}
+@font-face{font-family:"Archivo";src:url(../fonts/archivo-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Archivo";src:url(../fonts/archivo-700.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Azeret Mono";src:url(../fonts/azeretmono-500.woff2) format("woff2");font-weight:500;font-display:swap}
+:root{--ink:#0E0E10;--gold:#E2B04A;--paper:#ECE7DC;--line:rgba(236,231,220,.2);--ease:cubic-bezier(.4,.14,.3,1);--pad:clamp(20px,5vw,64px);
+ --f-d:"Big Shoulders",Impact,sans-serif;--f-t:"Archivo",system-ui,sans-serif;--f-m:"Azeret Mono",ui-monospace,monospace}
+*{box-sizing:border-box;margin:0}
+body{background:var(--ink);color:var(--paper);font:400 clamp(1.0625rem,1rem + .4vw,1.25rem)/1.5 var(--f-t);overflow-x:clip}
+.sec{padding:clamp(56px,9vw,120px) var(--pad);max-width:1280px;margin:0 auto}
+.eyebrow{font:500 .8125rem/1.4 var(--f-m);letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+h2{font:900 clamp(2.75rem,9vw,6rem)/1 var(--f-d);text-transform:uppercase;margin-top:12px}
+/* ---- a tarja: o elemento .t guarda o valor; ::after é a barra ---- */
+.t{position:relative;display:inline-block;isolation:isolate}
+.t::after{content:"";position:absolute;inset:-.06em -.12em;background:var(--tarja,var(--ink));transform:scaleX(0);transform-origin:100% 50%;z-index:1}
+/* ---- documento ---- */
+.doc{background:var(--paper);color:var(--ink);padding:clamp(24px,4vw,48px);margin-top:clamp(28px,5vw,56px);max-width:860px;position:relative;
+  clip-path:polygon(0 0,calc(100% - 28px) 0,100% 28px,100% 100%,0 100%)}
+.doc .hd{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:500 .8125rem/1.4 var(--f-m);letter-spacing:.14em;text-transform:uppercase;border-bottom:2px solid var(--ink);padding-bottom:12px}
+.doc p{margin-top:20px;font-size:clamp(1.125rem,1rem + .8vw,1.5rem);line-height:1.7}
+.doc .t{font-weight:700;--tarja:var(--ink)}
+/* ---- o valor gigante ---- */
+.val{margin-top:clamp(28px,5vw,64px);border-top:1px solid var(--line);padding-top:clamp(20px,3vw,40px)}
+.big{font:900 clamp(7rem,38vw,24rem)/.8 var(--f-d);letter-spacing:-.02em;text-transform:uppercase;display:block}
+.big .t{--tarja:var(--gold)}
+.big .t::after{inset:-.02em -.04em}
+.big .m{color:var(--gold)}
+.cap{font:500 .8125rem/1.5 var(--f-m);letter-spacing:.14em;text-transform:uppercase;margin-top:20px;color:#B4AEA2;max-width:56ch}
+.stamp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:500 clamp(.6875rem,1.6vw,.9rem)/1 var(--f-m);letter-spacing:.3em;color:var(--paper);z-index:2;opacity:0}
+.big .stamp{color:var(--ink)}
+/* ---- rota 1: scroll-driven ---- */
+@supports (animation-timeline: view()){
+ @media (prefers-reduced-motion:no-preference){
+  .t::after{transform:scaleX(1);animation:varre linear both;animation-timeline:view();animation-range:entry 35% entry 100%}
+  .t.d2::after{animation-range:entry 45% entry 110%}
+  .t.d3::after{animation-range:entry 55% entry 120%}
+  .big .t::after{animation-range:entry 20% cover 38%}
+  .stamp{opacity:1;animation:some linear both;animation-timeline:view();animation-range:entry 20% entry 100%}
+  .big .stamp{animation-range:entry 20% cover 28%}
+ }
+}
+@keyframes varre{to{transform:scaleX(0)}}
+@keyframes some{70%,100%{opacity:0}}
+/* ---- rota 2: reserva por IntersectionObserver (navegador sem timeline) ---- */
+@supports not (animation-timeline: view()){
+ @media (prefers-reduced-motion:no-preference){
+  .io .t::after{transform:scaleX(1)}
+  .io .t.on::after{transform:scaleX(0);transition:transform .7s var(--ease) var(--atraso,0s)}
+  .io .stamp{opacity:1}.io .t.on .stamp{opacity:0;transition:opacity .3s .3s}
+ }
+}
+@media (prefers-reduced-motion:reduce){.stamp{display:none}}
+</style>
+</head>
+<body>
+<section class="sec">
+  <p class="eyebrow">Documento 001 · condição do evento</p>
+  <h2>O que só quem está<br>no grupo vê.</h2>
+
+  <div style="min-height:46svh"></div><!-- empurra o documento para baixo da dobra: a tarja só é vista varrendo se o bloco ainda não estava na tela -->
+  <article class="doc" aria-label="Documento com a condição">
+    <div class="hd"><span>Campanha · Transmissão</span><span>Nº 001 / 003</span></div>
+    <p>Quem entrar no grupo recebe o acesso às
+      <span class="t">três noites<span class="stamp" aria-hidden="true">RESTRITO</span></span>
+      e, no último dia, a
+      <span class="t d2">condição especial<span class="stamp" aria-hidden="true">RESTRITO</span></span>
+      de inscrição, válida
+      <span class="t d3">só durante a transmissão<span class="stamp" aria-hidden="true">RESTRITO</span></span>.</p>
+  </article>
+
+  <div class="val">
+    <p class="eyebrow">A condição</p>
+    <span class="big" aria-label="2 por 1">
+      <span class="t">1<span class="m"> = </span>2<span class="stamp" aria-hidden="true">● INFORMAÇÃO RESTRITA ●</span></span>
+    </span>
+    <p class="cap">2 por 1. Valores e regras só dentro do grupo, no último dia.</p>
+  </div>
+</section>
+<div style="height:60svh"></div>
+<script>
+/* reserva: só entra se o navegador NÃO tem animation-timeline e o usuário aceita movimento */
+(function(){
+  if (CSS.supports("animation-timeline: view()") || matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+  document.documentElement.classList.add("io");
+  var els = document.querySelectorAll(".t"), i = 0;
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); } });
+  }, { threshold: .6 });
+  els.forEach(function (el) { el.style.setProperty("--atraso", (i++ * .12) + "s"); io.observe(el); });
+})();
+</script>
+</body>
+</html>

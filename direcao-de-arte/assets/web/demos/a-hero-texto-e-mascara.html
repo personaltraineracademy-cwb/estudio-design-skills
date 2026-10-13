@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo A · Hero: texto revelando + foto com máscara</title>
+<meta name="description" content="Teste de movimento: revelação por linha (CSS puro), máscara de foto com clip-path e visor REC.">
+<!--
+  TÉCNICAS: (1) linha revelada = span com overflow:clip + translateY, atraso por --i (sem JS);
+  (2) foto: clip-path inset() animado + bloco ouro que varre; (3) visor REC pisca 5x e fica fixo (WCAG 2.2.2);
+  (4) SplitText (GSAP) SÓ no subtítulo, depois de document.fonts.ready, com fallback = texto já visível.
+  Sem JS e com prefers-reduced-motion: tudo aparece parado, na hora.
+-->
+<style>
+@font-face{font-family:"Big Shoulders";src:url(../fonts/bigshoulders-900.woff2) format("woff2");font-weight:900;font-display:swap}
+@font-face{font-family:"Archivo";src:url(../fonts/archivo-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Archivo";src:url(../fonts/archivo-700.woff2) format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Azeret Mono";src:url(../fonts/azeretmono-500.woff2) format("woff2");font-weight:500;font-display:swap}
+:root{
+  --ink:#0E0E10; --ink2:#161411; --gold:#E2B04A; --paper:#ECE7DC; --mute:#B4AEA2; --line:rgba(236,231,220,.18);
+  --ease:cubic-bezier(.4,.14,.3,1); --pad:clamp(20px,5vw,64px);
+  --f-d:"Big Shoulders",Impact,"Arial Narrow",sans-serif; --f-t:"Archivo",system-ui,sans-serif; --f-m:"Azeret Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--ink);color:var(--paper);font:400 clamp(1.0625rem,1rem + .4vw,1.25rem)/1.5 var(--f-t);min-height:100svh;overflow-x:clip}
+/* grão único, fixo, por cima de tudo (PNG/SVG de 1 azulejo, nunca sobre o texto pequeno: opacidade baixa) */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9;opacity:.09;mix-blend-mode:screen;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -.2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:14px var(--pad);border-bottom:1px solid var(--line);min-height:64px}
+.logo{font:900 1.65rem/1 var(--f-d);letter-spacing:.02em;display:flex;gap:10px;align-items:center}
+.logo i{width:14px;height:14px;background:var(--gold);display:block}
+.rec{font:500 .8125rem/1 var(--f-m);letter-spacing:.14em;display:flex;gap:8px;align-items:center;text-transform:uppercase}
+.rec b{width:10px;height:10px;border-radius:50%;background:#F2542D;display:block}
+.hero{display:grid;gap:clamp(24px,4vw,64px);padding:clamp(28px,5vw,72px) var(--pad) clamp(40px,6vw,88px);max-width:1280px;margin:0 auto;align-items:end}
+@media(min-width:900px){.hero{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)}}
+.eyebrow{font:500 .8125rem/1.4 var(--f-m);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:flex;gap:12px;align-items:center;margin-bottom:20px}
+.eyebrow::after{content:"";height:1px;background:var(--gold);width:clamp(32px,8vw,96px);opacity:.7}
+/* line-height .96: com .86 o acento da linha de baixo (Ú, Ê) invade a base da linha de cima */
+h1{font:900 clamp(4rem,19vw,7.5rem)/.96 var(--f-d);text-transform:uppercase;letter-spacing:-.005em;text-wrap:balance}
+/* acento (^ ~ ´) sobe acima da linha: a janela do recorte precisa de folga em cima, senão ele é cortado */
+h1 .l{display:block;overflow:clip;padding-block:.2em .05em;margin-block:-.2em -.05em}
+h1 .l>span{display:block}
+h1 .gold{color:var(--gold)}
+.sub{max-width:38ch;margin-top:clamp(20px,3vw,32px);color:var(--paper)}
+.sub .w{display:inline-block}
+.cta{display:inline-flex;align-items:center;gap:14px;margin-top:28px;min-height:56px;padding:0 28px;background:var(--gold);color:var(--ink);font:700 1rem/1 var(--f-t);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border-radius:10px;transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.cta:hover{transform:translateY(-2px);box-shadow:0 8px 0 rgba(205,168,94,.25)}
+.cta:focus-visible{outline:2px solid var(--paper);outline-offset:3px}
+.cta span{display:inline-block;transition:transform .2s var(--ease)}
+.cta:hover span{transform:translateX(4px)}
+/* foto com máscara */
+.frame{position:relative;aspect-ratio:4/5;background:var(--ink2);clip-path:polygon(0 0,calc(100% - 44px) 0,100% 44px,100% 100%,0 100%);border:0}
+.frame img{position:absolute;inset:auto 0 0 0;width:100%;height:100%;object-fit:cover;object-position:50% 100%;display:block;
+  -webkit-mask-image:linear-gradient(#000 78%,transparent);mask-image:linear-gradient(#000 78%,transparent)}
+.frame .grid{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:12.5% 10%;opacity:.55}
+.frame .sweep{position:absolute;inset:0;background:var(--gold);transform-origin:right}
+.frame .vis{position:absolute;left:14px;top:14px;display:flex;gap:8px;align-items:center;font:500 .75rem/1 var(--f-m);letter-spacing:.14em;background:var(--ink);padding:8px 10px;color:var(--paper)}
+.frame .vis b{width:9px;height:9px;border-radius:50%;background:#F2542D}
+.tag{position:absolute;left:0;bottom:18px;background:var(--gold);color:var(--ink);font:900 1.5rem/1 var(--f-d);letter-spacing:.04em;padding:8px 16px 8px 14px;text-transform:uppercase}
+.strip{border-top:1px solid var(--line);padding:18px max(var(--pad),calc((100% - 1280px)/2 + var(--pad)));font:500 .8125rem/1.6 var(--f-m);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);display:flex;gap:10px 28px;flex-wrap:wrap}
+/* ---- movimento: só quando o usuário não pediu para reduzir ---- */
+@media (prefers-reduced-motion:no-preference){
+  h1 .l>span{animation:up .7s var(--ease) both;animation-delay:calc(var(--i,0)*90ms + 80ms)}
+  .eyebrow,.cta{animation:fade .5s var(--ease) both;animation-delay:.55s}
+  .cta{animation-delay:.9s}
+  .frame{animation:wipe .9s var(--ease) .15s both}
+  .frame img{animation:settle 1.2s var(--ease) .15s both}
+  .frame .sweep{animation:sweep .8s var(--ease) .1s both}
+  .rec b,.frame .vis b{animation:rec 1s steps(1,end) 5}  /* 5 piscadas e fica fixo */
+}
+@keyframes up{from{transform:translateY(105%)}to{transform:none}}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes wipe{from{clip-path:polygon(0 0,0 0,0 44px,0 100%,0 100%)}to{clip-path:polygon(0 0,calc(100% - 44px) 0,100% 44px,100% 100%,0 100%)}}
+@keyframes sweep{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@keyframes settle{from{transform:scale(1.08)}to{transform:none}}
+@keyframes rec{50%{opacity:.15}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="logo"><i></i>MARCA</div>
+  <div class="rec"><b aria-hidden="true"></b>Ao vivo em breve</div>
+</header>
+<main>
+<section class="hero">
+  <div>
+    <p class="eyebrow">Transmissão · 3 noites</p>
+    <h1 aria-label="Três noites. Uma única condição.">
+      <span class="l" aria-hidden="true" style="--i:0"><span>Três noites.</span></span>
+      <span class="l gold" aria-hidden="true" style="--i:1"><span>Uma única</span></span>
+      <span class="l" aria-hidden="true" style="--i:2"><span>condição.</span></span>
+    </h1>
+    <p class="sub" id="sub">Entre no grupo e receba o link da transmissão antes de todo mundo.</p>
+    <a class="cta" href="#entrar">Quero entrar no grupo <span aria-hidden="true">→</span></a>
+  </div>
+  <div class="frame" role="img" aria-label="Professor em preto e branco sobre grade de medição">
+    <div class="grid"></div>
+    <img src="img/pessoa.svg" width="720" height="936" alt="">
+    <div class="sweep" aria-hidden="true"></div>
+    <div class="vis" aria-hidden="true"><b></b>REC</div>
+    <div class="tag" aria-hidden="true">Noite 1</div>
+  </div>
+</section>
+<div class="strip"><span>3 noites</span><span>ao vivo</span><span>grupo fechado</span></div>
+</main>
+<!-- SplitText é opcional: sem ele (ou sem JS) o subtítulo já está visível. -->
+<script src="../vendor/gsap/3.15.0/gsap.min.js"></script>
+<script src="../vendor/gsap/3.15.0/SplitText.min.js"></script>
+<script>
+(function(){
+  if(!window.gsap||!window.SplitText||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  gsap.registerPlugin(SplitText);
+  document.fonts.ready.then(function(){
+    SplitText.create("#sub",{type:"lines,words",mask:"lines",autoSplit:true,aria:"auto",
+      onSplit:function(self){return gsap.from(self.lines,{yPercent:110,duration:.6,ease:"power3.out",stagger:.08,delay:.6});}});
+  });
+})();
+</script>
+</body>
+</html>

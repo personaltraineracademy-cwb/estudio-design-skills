@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+.check/
+_scratch/
+.env
+.env.local
+.env.*.local
+_entrega/
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+.DS_Store
+.vercel
+
+out-*/
+_entrega/

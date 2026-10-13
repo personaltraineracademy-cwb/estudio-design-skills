@@ -1,0 +1,1327 @@
+{
+ "versao": "2026-10-10",
+ "formato_spec": "Família:peso[:eixo=valor,...] — mesmo formato do tipos.py (ex.: \"Mona Sans:800:wdth=75\", \"Fraunces:600:opsz=144,SOFT=100\"); peso numérico 100–900; \"Condensed/Expanded\" de família com eixo de largura viram wdth=75 / wdth=125; itálico NÃO vai no spec (ver \"italico\": papéis em itálico)",
+ "campos": "id: origem-seção-código · voz: slug da 16a §4 · titulo/texto/numeros/acento: specs (numeros = dado, preço, contador, código; acento = 3ª fonte, rótulo, eco ou itálico) · italico: papéis que vão em itálico · tnum: a receita pede algarismos tabulares · detalhes: caixa-alta, faixas de peso/eixo da pesquisa (o spec usa o 1º valor da faixa) · licencas: das famílias, segundo o catalogo.json",
+ "receitas": [
+  {
+   "id": "16a-4.1-A1",
+   "voz": "tecnico",
+   "nome": "Ficha técnica",
+   "titulo": "IBM Plex Sans:600:wdth=75",
+   "texto": "IBM Plex Sans:400:wdth=100",
+   "numeros": "IBM Plex Mono:500",
+   "acento": null,
+   "italico": [],
+   "tnum": true,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "laudo, comparativo, landing B2B, carrossel 'em números'",
+   "evitar": "com azul + grade fina vira 'cara de IBM'; a assinatura é a largura 75 nos títulos, não a cor",
+   "detalhes": "superfamília: contraste por largura (75↔100) e peso; a mono irmã faz o dado",
+   "ref": "16a §4.1"
+  },
+  {
+   "id": "16a-4.1-A2",
+   "voz": "tecnico",
+   "nome": "Artigo científico",
+   "titulo": "Source Serif 4:600:opsz=60",
+   "texto": "Source Sans 3:400",
+   "numeros": "Source Code Pro:500",
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "blog científico, e-book, carrossel de estudo citado, página de evidências",
+   "evitar": "título serifado em fundo escuro precisa de peso ≥ 600",
+   "detalhes": "família Source da Adobe",
+   "ref": "16a §4.1"
+  },
+  {
+   "id": "16a-4.1-A3",
+   "voz": "tecnico",
+   "nome": "Nitidez como dado",
+   "titulo": "Geologica:800:SHRP=100",
+   "texto": "Geologica:400:SHRP=0",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "indústria, engenharia, laboratório",
+   "evitar": "SHRP alto só com ≥ 64 px na arte / ≥ 32 px no site",
+   "detalhes": "uma família só; o eixo de nitidez é a voz",
+   "ref": "16a §4.1"
+  },
+  {
+   "id": "16a-4.1-A4",
+   "voz": "tecnico",
+   "nome": "Número protagonista",
+   "titulo": "Martian Mono:700:wdth=112.5",
+   "texto": "Atkinson Hyperlegible Next:400",
+   "numeros": "Martian Mono:700:wdth=112.5",
+   "acento": null,
+   "italico": [],
+   "tnum": true,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "'37% mais força', resultado de aluno, placar de desafio",
+   "evitar": "mono < 64 px na arte = veto",
+   "detalhes": "a mono é o dado-herói (300–480 px na arte) = título; texto 400–500",
+   "ref": "16a §4.1"
+  },
+  {
+   "id": "16a-4.1-A5",
+   "voz": "tecnico",
+   "nome": "Relatório",
+   "titulo": "Chivo:800",
+   "texto": "Chivo:400",
+   "numeros": "Chivo Mono:400",
+   "acento": null,
+   "italico": [],
+   "tnum": true,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "relatório anual, dashboard, página de resultados",
+   "evitar": "Chivo 800 é larga e pesada → título curto",
+   "detalhes": "mesma fundição (Omnibus-Type); a mono irmã alinha as colunas",
+   "ref": "16a §4.1"
+  },
+  {
+   "id": "16a-4.2-B1",
+   "voz": "esportivo",
+   "nome": "Placar de Chicago",
+   "titulo": "Big Shoulders:900:opsz=72",
+   "texto": "Sofia Sans:400",
+   "numeros": "Big Shoulders:600:opsz=10",
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "anúncio de treino, evento esportivo, story",
+   "evitar": "Big Shoulders nunca em texto corrido",
+   "detalhes": "título em caixa-alta; rótulo/dado na MESMA família com opsz 10",
+   "ref": "16a §4.2"
+  },
+  {
+   "id": "16a-4.2-B2",
+   "voz": "esportivo",
+   "nome": "Uma família, três velocidades",
+   "titulo": "Saira:800:wdth=50",
+   "texto": "Saira:400:wdth=100",
+   "numeros": "Saira:700:wdth=125",
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "academia, corrida, app de treino",
+   "evitar": "wdth 50 abaixo de 64 px vira 'cerca' → só título",
+   "detalhes": "a largura vira hierarquia (par dentro da fonte)",
+   "ref": "16a §4.2"
+  },
+  {
+   "id": "16a-4.2-B3",
+   "voz": "esportivo",
+   "nome": "Estádio-espaçonave",
+   "titulo": "Tourney:900:wdth=125",
+   "texto": "Barlow:500",
+   "numeros": null,
+   "acento": "Tourney:100",
+   "italico": [
+    "titulo"
+   ],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "lançamento de tênis, campeonato, e-sports",
+   "evitar": "o eco (peso 100) é textura: ≥ 120 px e sem informação",
+   "detalhes": "acento = eco do título no peso 100 (quase contorno), atrás do título",
+   "ref": "16a §4.2"
+  },
+  {
+   "id": "16a-4.2-B4",
+   "voz": "esportivo",
+   "nome": "Arquibancada",
+   "titulo": "Sofia Sans Extra Condensed:900",
+   "texto": "Sofia Sans:400",
+   "numeros": null,
+   "acento": "Sofia Sans Condensed:600",
+   "italico": [
+    "titulo"
+   ],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "futebol, vôlei, jogos escolares",
+   "evitar": "itálico condensado preto em caixa-alta com acento → medir a entrelinha na tinta",
+   "detalhes": "superfamília Lettersoup; acento = rótulo",
+   "ref": "16a §4.2"
+  },
+  {
+   "id": "16a-4.2-B5",
+   "voz": "esportivo",
+   "nome": "Velocidade inclinada",
+   "titulo": "Archivo:900:wdth=62",
+   "texto": "Archivo:400:wdth=100",
+   "numeros": "Archivo:700:wdth=125",
+   "acento": null,
+   "italico": [
+    "titulo"
+   ],
+   "tnum": true,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "promoção esportiva, ciclismo, corrida de rua",
+   "evitar": "itálico só no título (≤ 5 palavras)",
+   "detalhes": "um arquivo com largura + itálico",
+   "ref": "16a §4.2"
+  },
+  {
+   "id": "16a-4.3-C1",
+   "voz": "editorial",
+   "nome": "Jornal de domingo",
+   "titulo": "Newsreader:500:opsz=72",
+   "texto": "Instrument Sans:400:wdth=100",
+   "numeros": null,
+   "acento": "Newsreader:400:opsz=72",
+   "italico": [
+    "acento"
+   ],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "blog, newsletter, carrossel de opinião",
+   "evitar": "em texto longo trocar a sans pela própria Newsreader opsz 16; conferir alturas-x a ±10%",
+   "detalhes": "acento = itálico 400 em 1–3 palavras do título",
+   "ref": "16a §4.3"
+  },
+  {
+   "id": "16a-4.3-C2",
+   "voz": "editorial",
+   "nome": "Livro aberto",
+   "titulo": "Literata:700:opsz=72",
+   "texto": "Literata:400:opsz=12",
+   "numeros": "Libre Franklin:600",
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "e-book, curso, artigo longo",
+   "evitar": "rótulo em caixa-alta espaçada como 'sobrancelha' é veto — só com dado real",
+   "detalhes": "texto opsz 12–16; números = capítulo, minutos de leitura",
+   "ref": "16a §4.3"
+  },
+  {
+   "id": "16a-4.3-C3",
+   "voz": "editorial",
+   "nome": "Revista contemporânea",
+   "titulo": "Instrument Serif:400",
+   "texto": "Instrument Sans:400:wdth=85",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "landing de estúdio, portfólio, convite",
+   "evitar": "Instrument Serif tem 1 peso e virou muito comum desde 2023; com creme + terracota é o clichê nº 1 de IA",
+   "detalhes": "título + itálico; texto wdth 85–100, wght 400–600",
+   "ref": "16a §4.3"
+  },
+  {
+   "id": "16a-4.3-C4",
+   "voz": "editorial",
+   "nome": "Ensaio com lupa",
+   "titulo": "Playfair:300:opsz=1200",
+   "texto": "Albert Sans:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "capa de revista, KV de exposição, hero de site",
+   "evitar": "título fino ≥ 120 px na arte e ≥ 48 px no site; a 'Playfair Display' antiga é clichê",
+   "detalhes": "",
+   "ref": "16a §4.3"
+  },
+  {
+   "id": "16a-4.3-C5",
+   "voz": "editorial",
+   "nome": "Clássico americano",
+   "titulo": "Libre Franklin:800",
+   "texto": "Libre Caslon Text:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "instituição tradicional, editora, advocacia",
+   "evitar": "Caslon Text só 400–700; altura-x menor → corpo +1–2 px no site",
+   "detalhes": "texto + itálico",
+   "ref": "16a §4.3"
+  },
+  {
+   "id": "16a-4.4-D1",
+   "voz": "jovem",
+   "nome": "Galeria jovem",
+   "titulo": "Syne:800",
+   "texto": "Onest:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "evento cultural jovem, moda, festa",
+   "evitar": "a Syne leve é estreita e estranha → nunca em texto",
+   "detalhes": "",
+   "ref": "16a §4.4"
+  },
+  {
+   "id": "16a-4.4-D2",
+   "voz": "jovem",
+   "nome": "Chiclete",
+   "titulo": "Bagel Fat One:400",
+   "texto": "Rethink Sans:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "comida, doce, app jovem, promoção divertida",
+   "evitar": "Bagel tem 1 peso (hierarquia só pelo tamanho); coreana-latina → testar Ç Ã Õ",
+   "detalhes": "texto 400–500",
+   "ref": "16a §4.4"
+  },
+  {
+   "id": "16a-4.4-D3",
+   "voz": "jovem",
+   "nome": "Grito alto",
+   "titulo": "Darker Grotesque:900",
+   "texto": "Reddit Sans:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "manifesto, campanha de opinião",
+   "evitar": "Darker em texto pequeno = ilegível",
+   "detalhes": "",
+   "ref": "16a §4.4"
+  },
+  {
+   "id": "16a-4.4-D4",
+   "voz": "jovem",
+   "nome": "Mão que quica",
+   "titulo": "Shantell Sans:800:BNCE=60,INFM=40",
+   "texto": "Shantell Sans:400:BNCE=0,INFM=0",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "educação infantil, ONG, bem-estar jovem",
+   "evitar": "BNCE/INFM altos só no título",
+   "detalhes": "",
+   "ref": "16a §4.4"
+  },
+  {
+   "id": "16a-4.4-D5",
+   "voz": "jovem",
+   "nome": "Fliperama",
+   "titulo": "Sixtyfour:400:SCAN=60,BLED=30",
+   "texto": "Figtree:400",
+   "numeros": "Sixtyfour:400:SCAN=60,BLED=30",
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "games, retrô, live",
+   "evitar": "Sixtyfour ≥ 96 px na arte; nunca texto; testar acentos",
+   "detalhes": "Sixtyfour não tem eixo wght (400 = padrão)",
+   "ref": "16a §4.4"
+  },
+  {
+   "id": "16a-4.5-E1",
+   "voz": "institucional",
+   "nome": "Serviço público",
+   "titulo": "Public Sans:700",
+   "texto": "Public Sans:400",
+   "numeros": "Public Sans:400",
+   "acento": null,
+   "italico": [],
+   "tnum": true,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "prefeitura, ONG, saúde pública, formulário",
+   "evitar": "neutra demais → a voz vem de cor, grade ou elemento",
+   "detalhes": "peso dos números não indicado (400 = o do texto)",
+   "ref": "16a §4.5"
+  },
+  {
+   "id": "16a-4.5-E2",
+   "voz": "institucional",
+   "nome": "Superfamília Merriweather",
+   "titulo": "Merriweather:800:opsz=144,wdth=87",
+   "texto": "Merriweather Sans:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "escola, cooperativa, jornal local",
+   "evitar": "altura-x alta → entrelinha 1,6 no texto",
+   "detalhes": "texto longo: Merriweather:400:opsz=18 no lugar da Sans",
+   "ref": "16a §4.5"
+  },
+  {
+   "id": "16a-4.5-E3",
+   "voz": "institucional",
+   "nome": "Banco com voz",
+   "titulo": "Schibsted Grotesk:800",
+   "texto": "Source Serif 4:400:opsz=16",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "finanças, seguros, jurídico",
+   "evitar": "a Schibsted só tem peso → precisa de um recurso próprio",
+   "detalhes": "",
+   "ref": "16a §4.5"
+  },
+  {
+   "id": "16a-4.5-E4",
+   "voz": "institucional",
+   "nome": "Atendimento",
+   "titulo": "Red Hat Display:700",
+   "texto": "Red Hat Text:400",
+   "numeros": "Red Hat Mono:400",
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "clínica, operadora, serviços",
+   "evitar": "associada à empresa Red Hat → evitar vermelho + chapéu",
+   "detalhes": "números = protocolo",
+   "ref": "16a §4.5"
+  },
+  {
+   "id": "16a-4.5-E5",
+   "voz": "institucional",
+   "nome": "Mesma mão",
+   "titulo": "Anybody:800:wdth=120",
+   "texto": "Epilogue:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "cooperativa, startup social, educação",
+   "evitar": "a Anybody é voz muito marcada → mudar a largura/uso p/ não repetir entre clientes",
+   "detalhes": "",
+   "ref": "16a §4.5"
+  },
+  {
+   "id": "16a-4.6-F1",
+   "voz": "luxo",
+   "nome": "Couture",
+   "titulo": "Bodoni Moda:500:opsz=96",
+   "texto": "Jost:400",
+   "numeros": null,
+   "acento": "Jost:500",
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "moda, joia, beleza, convite",
+   "evitar": "em tamanho menor, baixar o opsz da Bodoni; nunca < 96 px na arte",
+   "detalhes": "título caixa-alta +0,02 em; acento = rótulo caixa-alta +0,1 em (≥ 34 px de maiúscula na arte)",
+   "ref": "16a §4.6"
+  },
+  {
+   "id": "16a-4.6-F2",
+   "voz": "luxo",
+   "nome": "Atelier",
+   "titulo": "Cormorant Garamond:500",
+   "texto": "Tenor Sans:400",
+   "numeros": null,
+   "acento": "Cormorant Garamond:400",
+   "italico": [
+    "acento"
+   ],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "ateliê, noiva, hotelaria",
+   "evitar": "Cormorant é de display: texto corrido só ≥ 20 px no site; Tenor tem 1 peso",
+   "detalhes": "Tenor Sans = rótulo/subtítulo em caixa-alta",
+   "ref": "16a §4.6"
+  },
+  {
+   "id": "16a-4.6-F3",
+   "voz": "luxo",
+   "nome": "Galeria",
+   "titulo": "Gloock:400",
+   "texto": "Host Grotesk:300",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "galeria, arquitetura, design de interiores",
+   "evitar": "Gloock tem 1 peso → hierarquia pelo tamanho",
+   "detalhes": "texto 300–400",
+   "ref": "16a §4.6"
+  },
+  {
+   "id": "16a-4.6-F4",
+   "voz": "luxo",
+   "nome": "Joalheria clássica",
+   "titulo": "Italiana:400",
+   "texto": "EB Garamond:400",
+   "numeros": null,
+   "acento": "EB Garamond:400",
+   "italico": [
+    "acento"
+   ],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "joalheria, vinho, hotel",
+   "evitar": "Italiana tem 1 peso fino → ≥ 96 px na arte; EB Garamond ≥ 18 px no site",
+   "detalhes": "título caixa-alta",
+   "ref": "16a §4.6"
+  },
+  {
+   "id": "16a-4.6-F5",
+   "voz": "luxo",
+   "nome": "Luxo contemporâneo (Fontshare)",
+   "titulo": "Zodiak:300",
+   "texto": "Switzer:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "ITF-FFL"
+   ],
+   "uso": "skincare, arquitetura, marca de autor",
+   "evitar": "licença ITF FFL (não OFL): ler o EULA, não embutir no repositório; o fonts.py não baixa do Fontshare",
+   "detalhes": "título Light/Thin (300 = Light)",
+   "ref": "16a §4.6"
+  },
+  {
+   "id": "16a-4.7-G1",
+   "voz": "cultural",
+   "nome": "Museu brincalhão",
+   "titulo": "Fraunces:300:opsz=144,SOFT=0,WONK=1",
+   "texto": "Recursive:400:MONO=0,CASL=0",
+   "numeros": null,
+   "acento": "Recursive:400:MONO=1",
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "museu, exposição, festival de arte",
+   "evitar": "Fraunces + creme + terracota = traço de IA",
+   "detalhes": "acento = legenda de obra (mesmo arquivo, eixo MONO)",
+   "ref": "16a §4.7"
+  },
+  {
+   "id": "16a-4.7-G2",
+   "voz": "cultural",
+   "nome": "Afro-diaspórico",
+   "titulo": "Ojuju:800",
+   "texto": "Spectral:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "cultura negra, festival, editora",
+   "evitar": "a Ojuju carrega identidade cultural — usar com sentido e, de preferência, com gente do tema",
+   "detalhes": "",
+   "ref": "16a §4.7"
+  },
+  {
+   "id": "16a-4.7-G3",
+   "voz": "cultural",
+   "nome": "Teatro de rua",
+   "titulo": "Young Serif:400",
+   "texto": "Funnel Sans:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "teatro, cinema de rua, coletivo",
+   "evitar": "Young Serif tem 1 peso → hierarquia pelo tamanho",
+   "detalhes": "",
+   "ref": "16a §4.7"
+  },
+  {
+   "id": "16a-4.7-G4",
+   "voz": "cultural",
+   "nome": "Festival de cinema",
+   "titulo": "Bodoni Moda:900:opsz=96",
+   "texto": "Newsreader:400:opsz=16",
+   "numeros": "Martian Mono:500:wdth=87.5",
+   "acento": null,
+   "italico": [
+    "titulo"
+   ],
+   "tnum": true,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "mostra, cineclube, estreia",
+   "evitar": "três famílias → só em site/programa; numa arte, ficar com 2",
+   "detalhes": "números = sessões/horários",
+   "ref": "16a §4.7"
+  },
+  {
+   "id": "16a-4.7-G5",
+   "voz": "cultural",
+   "nome": "Bienal",
+   "titulo": "Commissioner:800:FLAR=100,VOLM=100",
+   "texto": "Commissioner:400:FLAR=0,VOLM=0",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "bienal, arquitetura, design",
+   "evitar": "sem itálico (só slnt −12–0); conferir no specimen o efeito de VOLM",
+   "detalhes": "",
+   "ref": "16a §4.7"
+  },
+  {
+   "id": "16a-4.8-H1",
+   "voz": "varejo",
+   "nome": "Oferta larga",
+   "titulo": "Dela Gothic One:400",
+   "texto": "Golos Text:500",
+   "numeros": "Golos Text:800",
+   "acento": null,
+   "italico": [],
+   "tnum": true,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "Black Friday, liquidação, varejo",
+   "evitar": "Golos tem formas fechadas → preço de olhada pede tamanho generoso; Dela é japonesa-latina → testar acentos",
+   "detalhes": "",
+   "ref": "16a §4.8"
+  },
+  {
+   "id": "16a-4.8-H2",
+   "voz": "varejo",
+   "nome": "Amigável arredondada",
+   "titulo": "Nunito:900",
+   "texto": "Nunito Sans:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "farmácia, pet, infantil, delivery",
+   "evitar": "arredondada demais = infantil; altura-x maior (YTLC) só em tamanho pequeno",
+   "detalhes": "Nunito Sans: YTLC pode subir a altura-x",
+   "ref": "16a §4.8"
+  },
+  {
+   "id": "16a-4.8-H3",
+   "voz": "varejo",
+   "nome": "Letreiro de loja",
+   "titulo": "Bungee:400",
+   "texto": "Barlow Semi Condensed:500",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "loja, food truck, feira",
+   "evitar": "Bungee só caixa-alta, 1 peso; já muito vista em 'divertido'",
+   "detalhes": "",
+   "ref": "16a §4.8"
+  },
+  {
+   "id": "16a-4.8-H4",
+   "voz": "varejo",
+   "nome": "Feirão / estoque",
+   "titulo": "Big Shoulders Stencil:900:opsz=72",
+   "texto": "Libre Franklin:500",
+   "numeros": "Libre Franklin:800",
+   "acento": null,
+   "italico": [],
+   "tnum": true,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "queima de estoque, atacado, material de construção",
+   "evitar": "o estêncil corta a letra — nunca em preço, código ou cupom",
+   "detalhes": "",
+   "ref": "16a §4.8"
+  },
+  {
+   "id": "16a-4.8-H5",
+   "voz": "varejo",
+   "nome": "Liquidação inclinada",
+   "titulo": "Mohave:700",
+   "texto": "Figtree:400",
+   "numeros": "Figtree:800",
+   "acento": null,
+   "italico": [
+    "titulo"
+   ],
+   "tnum": true,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "e-commerce, moda rápida",
+   "evitar": "Mohave vai só até 700 → o contraste vem do tamanho e da cor",
+   "detalhes": "",
+   "ref": "16a §4.8"
+  },
+  {
+   "id": "16a-4.9-I1",
+   "voz": "tecnologia",
+   "nome": "Produto de software",
+   "titulo": "Geist:700",
+   "texto": "Geist:400",
+   "numeros": "Geist Mono:400",
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "SaaS, documentação, ferramenta para dev",
+   "evitar": "Geist = 'cara da Vercel' e está virando padrão → precisa de outro recurso de voz",
+   "detalhes": "números = código",
+   "ref": "16a §4.9"
+  },
+  {
+   "id": "16a-4.9-I2",
+   "voz": "tecnologia",
+   "nome": "IA com calor",
+   "titulo": "Sora:600",
+   "texto": "Sora:400",
+   "numeros": "Azeret Mono:400",
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "startup de IA, fintech",
+   "evitar": "Sora sem itálico; a mono só em dado",
+   "detalhes": "",
+   "ref": "16a §4.9"
+  },
+  {
+   "id": "16a-4.9-I3",
+   "voz": "tecnologia",
+   "nome": "Hardware",
+   "titulo": "Tektur:800:wdth=75",
+   "texto": "Reddit Sans:400",
+   "numeros": "Reddit Mono:500",
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "eletrônicos, drones, gamer",
+   "evitar": "Tektur pode ficar 'gamer demais'",
+   "detalhes": "números = especificação",
+   "ref": "16a §4.9"
+  },
+  {
+   "id": "16a-4.9-I4",
+   "voz": "tecnologia",
+   "nome": "Terminal elegante",
+   "titulo": "Major Mono Display:400",
+   "texto": "Spline Sans:400",
+   "numeros": "Spline Sans Mono:400",
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "evento de dev, ciência de dados",
+   "evitar": "Major Mono é estranha de propósito → 1–3 palavras, nunca frase longa",
+   "detalhes": "números = código",
+   "ref": "16a §4.9"
+  },
+  {
+   "id": "16a-4.9-I5",
+   "voz": "tecnologia",
+   "nome": "Painel de LED",
+   "titulo": "Doto:800:ROND=100",
+   "texto": "Be Vietnam Pro:400",
+   "numeros": "Doto:800:ROND=100",
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "placar, painel de evento, transporte",
+   "evitar": "Doto ≥ 96 px na arte",
+   "detalhes": "",
+   "ref": "16a §4.9"
+  },
+  {
+   "id": "16a-4.10-J1",
+   "voz": "educacao",
+   "nome": "Alfabetização",
+   "titulo": "Fredoka:600:wdth=110",
+   "texto": "Andika:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "escola, material de leitura, app infantil",
+   "evitar": "Andika só 400/700",
+   "detalhes": "",
+   "ref": "16a §4.10"
+  },
+  {
+   "id": "16a-4.10-J2",
+   "voz": "educacao",
+   "nome": "Leitura acessível",
+   "titulo": "Lexend:700",
+   "texto": "Lexend:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "EAD, material p/ adultos em formação, acessibilidade",
+   "evitar": "sem itálico (ênfase por peso); o benefício p/ dislexia é alegação da autora",
+   "detalhes": "Lexend Exa/Giga p/ títulos mais largos",
+   "ref": "16a §4.10"
+  },
+  {
+   "id": "16a-4.10-J3",
+   "voz": "educacao",
+   "nome": "Programação",
+   "titulo": "Bitter:700",
+   "texto": "Fira Sans:400",
+   "numeros": "Fira Code:400",
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "curso de programação, blog técnico",
+   "evitar": "ligaduras do Fira Code (=> !=) confundem iniciante → font-variant-ligatures: none em material de ensino",
+   "detalhes": "números = código",
+   "ref": "16a §4.10"
+  },
+  {
+   "id": "16a-4.10-J4",
+   "voz": "educacao",
+   "nome": "Universidade brasileira",
+   "titulo": "Gabarito:800",
+   "texto": "Literata:400:opsz=14",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "faculdade, pós, vestibular",
+   "evitar": "Gabarito sem itálico",
+   "detalhes": "",
+   "ref": "16a §4.10"
+  },
+  {
+   "id": "16a-4.10-J5",
+   "voz": "educacao",
+   "nome": "Infantil",
+   "titulo": "Grandstander:800",
+   "texto": "Atkinson Hyperlegible Next:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "livro infantil, escola, app educativo",
+   "evitar": "Grandstander só no título",
+   "detalhes": "",
+   "ref": "16a §4.10"
+  },
+  {
+   "id": "16a-4.11-K1",
+   "voz": "saude",
+   "nome": "Clínica humana",
+   "titulo": "Familjen Grotesk:700",
+   "texto": "Inclusive Sans:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "clínica, fisioterapia, psicologia",
+   "evitar": "Familjen vai só até 700",
+   "detalhes": "",
+   "ref": "16a §4.11"
+  },
+  {
+   "id": "16a-4.11-K2",
+   "voz": "saude",
+   "nome": "Fisiologia",
+   "titulo": "Pathway Extreme:800:opsz=144,wdth=75",
+   "texto": "Pathway Extreme:400:opsz=12,wdth=100",
+   "numeros": "Pathway Extreme:400:opsz=12,wdth=100",
+   "acento": null,
+   "italico": [],
+   "tnum": true,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "laboratório de esporte, avaliação física, app",
+   "evitar": "condensada só no título",
+   "detalhes": "números (bpm, kg, %) em tnum; peso não indicado (= texto)",
+   "ref": "16a §4.11"
+  },
+  {
+   "id": "16a-4.11-K3",
+   "voz": "saude",
+   "nome": "Bem-estar editorial",
+   "titulo": "Host Grotesk:600",
+   "texto": "Newsreader:400:opsz=16",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "nutrição, sono, saúde da mulher",
+   "evitar": "Host vai de 300 a 800",
+   "detalhes": "",
+   "ref": "16a §4.11"
+  },
+  {
+   "id": "16a-4.11-K4",
+   "voz": "saude",
+   "nome": "Treino de força",
+   "titulo": "Khand:700",
+   "texto": "Barlow:400",
+   "numeros": "Khand:600",
+   "acento": null,
+   "italico": [],
+   "tnum": true,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "academia, powerlifting, crossfit",
+   "evitar": "Khand estática 300–700, sem itálico; cargas precisam de números tabulares — conferir se a Khand tem tnum",
+   "detalhes": "números = cargas",
+   "ref": "16a §4.11"
+  },
+  {
+   "id": "16a-4.11-K5",
+   "voz": "saude",
+   "nome": "Nutrição leve",
+   "titulo": "Urbanist:700",
+   "texto": "Lora:400",
+   "numeros": null,
+   "acento": "Lora:400",
+   "italico": [
+    "acento"
+   ],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "nutrição, receitas, marca de alimento",
+   "evitar": "Lora vai de 400 a 700",
+   "detalhes": "",
+   "ref": "16a §4.11"
+  },
+  {
+   "id": "16a-4.12-L1",
+   "voz": "evento",
+   "nome": "Contagem regressiva",
+   "titulo": "Handjet:700:ELSH=2",
+   "texto": "Onest:500",
+   "numeros": "Handjet:700:ELSH=2",
+   "acento": null,
+   "italico": [],
+   "tnum": true,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "lançamento, live, abertura de vendas",
+   "evitar": "números de contagem sempre tabulares — conferir tnum da Handjet; senão travar a largura da caixa",
+   "detalhes": "ELSH/ELGR animáveis (relógio sem trocar de fonte)",
+   "ref": "16a §4.12"
+  },
+  {
+   "id": "16a-4.12-L2",
+   "voz": "evento",
+   "nome": "Conferência tech",
+   "titulo": "Unbounded:800",
+   "texto": "Instrument Sans:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "conferência, hackathon",
+   "evitar": "Unbounded já soa 'web3'",
+   "detalhes": "",
+   "ref": "16a §4.12"
+  },
+  {
+   "id": "16a-4.12-L3",
+   "voz": "evento",
+   "nome": "Gala / premiação",
+   "titulo": "Playfair:800:opsz=1200",
+   "texto": "Jost:400",
+   "numeros": null,
+   "acento": "Jost:500",
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "premiação, formatura, jantar",
+   "evitar": "rótulo em caixa-alta só com dado real (categoria, data)",
+   "detalhes": "acento = rótulo caixa-alta",
+   "ref": "16a §4.12"
+  },
+  {
+   "id": "16a-4.12-L4",
+   "voz": "evento",
+   "nome": "Festival de música",
+   "titulo": "Tilt Warp:400",
+   "texto": "Golos Text:500",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "OFL"
+   ],
+   "uso": "festival, show, abertura de vídeo",
+   "evitar": "rotação parada ≥ 1,5 s antes de ler",
+   "detalhes": "XROT/YROT animados (−45–45)",
+   "ref": "16a §4.12"
+  },
+  {
+   "id": "16a-4.12-L5",
+   "voz": "evento",
+   "nome": "Lançamento largo",
+   "titulo": "Syncopate:700",
+   "texto": "Spline Sans:400",
+   "numeros": null,
+   "acento": null,
+   "italico": [],
+   "tnum": false,
+   "licencas": [
+    "Apache",
+    "OFL"
+   ],
+   "uso": "lançamento de produto, moda, carro",
+   "evitar": "Syncopate só 400/700 e larguíssima → título ≤ 3 palavras",
+   "detalhes": "título caixa-alta",
+   "ref": "16a §4.12"
+  }
+ ],
+ "sistemas_cliente": {
+  "EXEMPLO": {
+   "nota": "cliente de exemplo (curso de educação física com várias linhas de produto); copie a estrutura para o seu cliente",
+   "status": "proposta (não aprovada)",
+   "ancora": "Archivo",
+   "ancora_uso": "CTA, preço, rodapé, legal, interface do site e endosso da marca-mãe (aparece em toda peça)",
+   "ancora_alternativa": [
+    "Zalando Sans",
+    "Zalando Sans Expanded"
+   ],
+   "ref": "16d §5",
+   "regras": [
+    "uma campanha = um sistema; nunca misturar dois na mesma campanha",
+    "a âncora aparece em toda peça (CTA, rodapé, endosso)",
+    "no máximo 3 famílias por peça (display + texto + acento); a âncora conta quando faz o texto",
+    "números de preço/contagem sempre tabular-nums",
+    "testar antes de fixar: mesmo anúncio em 2 sistemas (A/B na Meta)"
+   ],
+   "mapa_campanhas": {
+    "Black Friday ao vivo": [
+     "EX-2-placar"
+    ],
+    "pós-graduação": [
+     "EX-1-laboratorio",
+     "EX-8-mentoria"
+    ],
+    "nova turma de formação": [
+     "EX-3-gabarito",
+     "EX-4-elastico"
+    ],
+    "iniciante / emagrecimento / feminino": [
+     "EX-5-acolhida"
+    ],
+    "conteúdo orgânico de autoridade": [
+     "EX-6-dossie",
+     "EX-1-laboratorio"
+    ],
+    "eventos presenciais": [
+     "EX-7-rua",
+     "EX-2-placar"
+    ],
+    "mentoria": [
+     "EX-8-mentoria"
+    ]
+   },
+   "sistemas": [
+    {
+     "id": "EX-1-laboratorio",
+     "nome": "Laboratório",
+     "voz": "editorial + técnica ('ciência do treino')",
+     "vozes": [
+      "editorial",
+      "tecnico"
+     ],
+     "titulo": "Newsreader:600:opsz=72",
+     "texto": "Archivo:400",
+     "numeros": "Fragment Mono:400",
+     "acento": null,
+     "italico": [
+      "titulo"
+     ],
+     "tnum": true,
+     "licencas": [
+      "OFL"
+     ],
+     "campanhas": "pós-graduações, artigos, aula de ciência",
+     "evitar": "serifa fina sobre foto movimentada; mono em parágrafo",
+     "detalhes": "título 600–700, itálico só em 1 palavra; mono = séries, cargas, referências"
+    },
+    {
+     "id": "EX-2-placar",
+     "nome": "Placar",
+     "voz": "atlética + ao vivo + urgente",
+     "vozes": [
+      "esportivo",
+      "aovivo",
+      "varejo"
+     ],
+     "titulo": "Big Shoulders:900:opsz=72",
+     "texto": "Archivo:500",
+     "numeros": "Azeret Mono:500",
+     "acento": null,
+     "italico": [],
+     "tnum": true,
+     "licencas": [
+      "OFL"
+     ],
+     "campanhas": "Black Friday ao vivo, desafios, competições, contagem regressiva",
+     "evitar": "Big Shoulders abaixo de ~40 px em texto corrido; 3D + contorno + sombra juntos",
+     "detalhes": "título CAIXA ALTA; mono = cronômetro, preço, lote; botão do site em Archivo 700"
+    },
+    {
+     "id": "EX-3-gabarito",
+     "nome": "Gabarito",
+     "voz": "educativa, brasileira",
+     "vozes": [
+      "educacao"
+     ],
+     "titulo": "Gabarito:800",
+     "texto": "Literata:400",
+     "numeros": null,
+     "acento": "Atkinson Hyperlegible Next:500",
+     "italico": [],
+     "tnum": false,
+     "licencas": [
+      "OFL"
+     ],
+     "campanhas": "cursos de formação, iniciante, carrossel didático, área do aluno",
+     "evitar": "usar em campanha de 'luxo'; mais de 3 pesos",
+     "detalhes": "título 800–900; Literata p/ texto longo/apostila; acento = exercício, legenda, passo"
+    },
+    {
+     "id": "EX-4-elastico",
+     "nome": "Elástico",
+     "voz": "jovem + movimento",
+     "vozes": [
+      "jovem",
+      "esportivo"
+     ],
+     "titulo": "Anybody:800:wdth=60",
+     "texto": "Archivo:400",
+     "numeros": null,
+     "acento": null,
+     "italico": [],
+     "tnum": false,
+     "licencas": [
+      "OFL"
+     ],
+     "campanhas": "lançamento de turma, campanha de marca, Reels",
+     "evitar": "larguras extremas (≤ 55 ou ≥ 140) em texto que precisa ser lido; Anybody no corpo",
+     "detalhes": "título 800–900 com largura animada wdth 60 ↔ 130 (parada no post, animada no Reels); o 'acento' é a própria largura mudando; 1–2 palavras por peça"
+    },
+    {
+     "id": "EX-5-acolhida",
+     "nome": "Acolhida",
+     "voz": "acolhedora/humana",
+     "vozes": [
+      "acolhedor"
+     ],
+     "titulo": "Fraunces:600:opsz=144,SOFT=100",
+     "texto": "Figtree:400",
+     "numeros": null,
+     "acento": "Caveat:400",
+     "italico": [],
+     "tnum": false,
+     "licencas": [
+      "OFL"
+     ],
+     "campanhas": "público feminino, emagrecimento, depoimentos, boas-vindas",
+     "evitar": "bege + planta + Fraunces (clichê 'bem-estar'); manuscrita em parágrafo ou em conteúdo técnico",
+     "detalhes": "acento = Caveat só em 1–3 palavras ('bilhete do professor'); peso do Caveat não indicado"
+    },
+    {
+     "id": "EX-6-dossie",
+     "nome": "Dossiê",
+     "voz": "documento / 'o que ninguém te conta'",
+     "vozes": [
+      "documento"
+     ],
+     "titulo": "Saira Stencil:800",
+     "texto": "Courier Prime:400",
+     "numeros": null,
+     "acento": "Archivo:600:wdth=75",
+     "italico": [],
+     "tnum": false,
+     "licencas": [
+      "OFL"
+     ],
+     "campanhas": "série de conteúdo (mitos × ciência), aula aberta, bastidores",
+     "evitar": "estêncil em preço, checkout, garantia; Courier em texto longo pequeno",
+     "detalhes": "título CAIXA ALTA (peso não indicado na 16d — 800 é escolha nossa, como o estêncil 800 da 16d §2.12); acento = 'Archivo Condensed 600' (carimbos, datas) → wdth 75; formulário do site em Archivo"
+    },
+    {
+     "id": "EX-7-rua",
+     "nome": "Rua",
+     "voz": "popular brasileira + comunidade",
+     "vozes": [
+      "popular",
+      "comunidade"
+     ],
+     "titulo": "Coiny:400",
+     "texto": "Rubik:400",
+     "numeros": null,
+     "acento": "Permanent Marker:400",
+     "alternativas": {
+      "titulo": "Londrina Solid:400"
+     },
+     "italico": [],
+     "tnum": false,
+     "licencas": [
+      "Apache",
+      "OFL"
+     ],
+     "campanhas": "eventos presenciais, datas de varejo, encontros",
+     "evitar": "em pós-graduação e mentoria; misturar com serifa de luxo",
+     "detalhes": "título alternativo: Londrina Solid:400; texto Rubik 400–500 (data, local); Permanent Marker só em 1 palavra; Coiny só no H1 do site"
+    },
+    {
+     "id": "EX-8-mentoria",
+     "nome": "Mentoria",
+     "voz": "premium/luxo calmo",
+     "vozes": [
+      "luxo",
+      "calma"
+     ],
+     "titulo": "Instrument Serif:400",
+     "texto": "Hanken Grotesk:300",
+     "numeros": null,
+     "acento": "Archivo:600:wdth=125",
+     "italico": [],
+     "tnum": false,
+     "licencas": [
+      "OFL"
+     ],
+     "campanhas": "mentoria, alto valor, certificado, convite",
+     "evitar": "Instrument Serif em tamanho pequeno; mais de 1 itálico por peça",
+     "detalhes": "título condensado grande; texto 300–400; acento = 'Archivo Expanded 600' em caixa-alta espaçada (rótulos) → wdth 125; botões do site em Archivo"
+    }
+   ]
+  }
+ }
+}

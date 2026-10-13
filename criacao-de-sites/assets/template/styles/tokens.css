@@ -1,0 +1,34 @@
+/* ARQUIVO GERADO por scripts/build-assets.py a partir de content/marca.json — não editar à mão.
+   Marca: Marca Exemplo. Para mudar cores, fontes ou raios: edite content/marca.json e rode `npm run assets`. */
+@theme static {
+  /* cores (texto pequeno só em tinta/papel/ink; destaque = fundo de ação, tarja, disco) */
+  --color-*: initial;
+  --color-ink: #111315; /* fundo escuro */
+  --color-ink-2: #1a1d20; /* superfície 2 (cartões, modal) */
+  --color-tinta: #fbfaf7; /* texto no escuro */
+  --color-papel: #efece4; /* fundo claro */
+  --color-destaque: #ff5a1f; /* ação primária, disco, tarja */
+  --color-sobre-destaque: #111315; /* texto sobre o destaque */
+  --color-acento: #3b6cff; /* 2ª cor: só áreas grandes */
+  --color-mute: #c9c6bd; /* texto de apoio sobre ink */
+  --color-erro: #ffb4ab;
+  --color-erro-papel: #9e1b32;
+
+  --font-display: var(--font-display-next), system-ui, sans-serif;
+  --font-sans: var(--font-text-next), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: var(--font-mono-next), ui-monospace, Consolas, monospace;
+
+  /* raios (forma): sinal = peça de destaque com função; os outros = conteúdo. O logo nunca arredonda. */
+  --radius-*: initial;
+  --radius-sinal: 0px;
+  --radius-rotulo: 6px;
+  --radius-cartao: 10px;
+  --radius-moldura: 16px;
+  --radius-pilula: 9999px;
+}
+:root {
+  --grao-op: 0.55;
+  --display-peso: 900;
+  --texto-peso: 500;
+  --display-caixa: uppercase;
+}

@@ -1,0 +1,22 @@
+{
+  "nome": "Marca Exemplo",
+  "slug": "marca-exemplo",
+  "cores": {
+    "ink": "#111315",
+    "ink2": "#1a1d20",
+    "tinta": "#fbfaf7",
+    "papel": "#efece4",
+    "destaque": "#ff5a1f",
+    "sobre_destaque": "#111315",
+    "acento": "#3b6cff",
+    "mute": "#c9c6bd"
+  },
+  "fontes": {
+    "display": {"familia": "Big Shoulders", "peso": 900, "caixa": "alta"},
+    "texto": {"familia": "Archivo", "pesos": [500, 800]},
+    "mono": {"familia": "Azeret Mono", "pesos": [500, 600]}
+  },
+  "forma": {"sinal": 0, "rotulo": 6, "cartao": 10, "moldura": 16},
+  "grao": 0.55,
+  "logo": {"principal": "logo", "simbolo": "logo-simbolo", "cor_arquivo": "tinta"}
+}
